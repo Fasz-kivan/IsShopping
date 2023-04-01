@@ -107,27 +107,21 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                // Retrieve the text that the user has entered by using the
-                // TextEditingController.
-                content: Text(myController.text),
-              );
-            },
-          );
-        },
+        onPressed: _addToList(myController.text),
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
-  void _addToList() {
+  AlertDialog _addToList(Text content) {
     setState(() {
-      listOfThings.add(Random().nextInt(100).toString());
+      listOfThings.add(content.toString());
     });
+    return AlertDialog(
+      // Retrieve the text that the user has entered by using the
+      // TextEditingController.
+      content: Text(myController.text),
+    );
   }
 }
