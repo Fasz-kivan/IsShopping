@@ -43,7 +43,6 @@ class MyHomePage extends StatefulWidget {
   // case the title) provided by the parent (in this case the App widget) and
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
-
   final String title;
 
   @override
@@ -55,15 +54,11 @@ class _MyHomePageState extends State<MyHomePage> {
   List<String> listOfThings = [];
   final myController = TextEditingController();
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    myController.dispose();
+    super.dispose();
   }
 
   @override
@@ -104,8 +99,8 @@ class _MyHomePageState extends State<MyHomePage> {
             const Text(
               'apad:',
             ),
-            Text(
-              '$_counter',
+            TextField(
+              controller: myController,
               style: Theme.of(context).textTheme.headlineMedium,
             ),
           ],
