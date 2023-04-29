@@ -20,7 +20,10 @@ class _TextListDisplayer extends State<TextListDisplayer> {
   Widget shoppingItemTemplate(shoppingItem) {
     return Card(
       elevation: 8,
-      margin: EdgeInsets.fromLTRB(8, 8, 8, 8),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      margin: const EdgeInsets.fromLTRB(8, 8, 8, 8),
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
@@ -30,8 +33,9 @@ class _TextListDisplayer extends State<TextListDisplayer> {
                 child: Text(
                   '${shoppingItem.itemName} ${shoppingItem.emoji}',
                   style: const TextStyle(
+                    fontWeight: FontWeight.bold,
                     fontSize: 70,
-                    color: Colors.orange,
+                    color: Colors.purple,
                   ),
                 ),
               ),
