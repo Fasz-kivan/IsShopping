@@ -1,6 +1,6 @@
 class ShoppingItem {
-  String? itemText;
+  String? itemName;
   String? emoji;
 
-  ShoppingItem({this.itemText, this.emoji});
+  ShoppingItem({this.itemName, this.emoji});
 }
