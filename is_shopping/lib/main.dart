@@ -12,10 +12,33 @@ class TextListDisplayer extends StatefulWidget {
 
 class _TextListDisplayer extends State<TextListDisplayer> {
   List<ShoppingItem> shoppingList = [
-    ShoppingItem(itemText: "Milk", emoji: "🐄"),
-    ShoppingItem(itemText: "Cheese", emoji: "🧀"),
-    ShoppingItem(itemText: "Pizza", emoji: "🍕"),
+    ShoppingItem(itemName: "Milk", emoji: "🐄"),
+    ShoppingItem(itemName: "Cheese", emoji: "🧀"),
+    ShoppingItem(itemName: "Pizza", emoji: "🍕"),
   ];
+
+  Widget shoppingItemTemplate(shoppingItem) {
+    return Card(
+      elevation: 8,
+      margin: EdgeInsets.fromLTRB(8, 8, 8, 8),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Center(
+                child: Text(
+                  '${shoppingItem.itemName} ${shoppingItem.emoji}',
+                  style: const TextStyle(
+                    fontSize: 70,
+                    color: Colors.orange,
+                  ),
+                ),
+              ),
+            ]),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,20 +51,14 @@ class _TextListDisplayer extends State<TextListDisplayer> {
       body: Center(
         child: Column(
           children: shoppingList
-              .map((shoppingItem) => Text(
-                    '${shoppingItem.itemText} ${shoppingItem.emoji}',
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 70,
-                        color: Colors.deepPurple),
-                  ))
+              .map((shoppingItem) => shoppingItemTemplate(shoppingItem))
               .toList(),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
-            shoppingList.add(ShoppingItem(itemText: "Cum", emoji: "🤍"));
+            shoppingList.add(ShoppingItem(itemName: "Cum", emoji: "🤍"));
           });
         },
         backgroundColor: Colors.deepOrange,
