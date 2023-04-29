@@ -3,9 +3,11 @@ import 'shopping_item.dart';
 
 final myController = TextEditingController();
 
-void main() => runApp(MaterialApp(home: TextListDisplayer()));
+void main() => runApp(const MaterialApp(home: TextListDisplayer()));
 
 class TextListDisplayer extends StatefulWidget {
+  const TextListDisplayer({super.key});
+
   @override
   _TextListDisplayer createState() => _TextListDisplayer();
 }
