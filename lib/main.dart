@@ -1,11 +1,16 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:is_shopping/emoji_dictionary.dart';
 import 'shopping_item.dart';
 
 final myController = TextEditingController();
 
-void main() => runApp(MaterialApp(home: TextListDisplayer()));
+void main() => runApp(const MaterialApp(home: TextListDisplayer()));
 
 class TextListDisplayer extends StatefulWidget {
+  const TextListDisplayer({super.key});
+
   @override
   _TextListDisplayer createState() => _TextListDisplayer();
 }
@@ -34,7 +39,7 @@ class _TextListDisplayer extends State<TextListDisplayer> {
                   '${shoppingItem.itemName} ${shoppingItem.emoji}',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 70,
+                    fontSize: 24,
                     color: Colors.purple,
                   ),
                 ),
@@ -52,7 +57,8 @@ class _TextListDisplayer extends State<TextListDisplayer> {
         title: const Text("IsShopping"),
         centerTitle: true,
       ),
-      body: Center(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 70),
         child: Column(
           children: shoppingList
               .map((shoppingItem) => shoppingItemTemplate(shoppingItem))
@@ -62,12 +68,54 @@ class _TextListDisplayer extends State<TextListDisplayer> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
-            shoppingList.add(ShoppingItem(itemName: "Cum", emoji: "🤍"));
+            showAddDialog();
           });
         },
         backgroundColor: Colors.deepOrange,
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  TextEditingController controller = TextEditingController();
+  Future showAddDialog() => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Add new item ➕"),
+          content: TextFormField(
+            autofocus: true,
+            decoration: const InputDecoration(
+                hintText: "//TODO random item from past lists?"),
+            controller: controller,
+          ),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  setState(() {
+                    addItemToList(
+                        ShoppingItem(itemName: controller.text, emoji: '🛒'));
+                    controller.text = '';
+                  });
+                },
+                child: const Text("Add"))
+          ],
+        ),
+      );
+
+  void addItemToList(ShoppingItem item) {
+    item.emoji = checkItemForEmoji(item);
+
+    shoppingList.add(item);
+    Navigator.of(context).pop();
+  }
+
+  String checkItemForEmoji(ShoppingItem item) {
+    String retVal = '🛒';
+    EmojiDictionary().dictionary.forEach((key, value) {
+      if (key == item.itemName) {
+        retVal = value;
+      }
+    });
+    return retVal;
   }
 }
