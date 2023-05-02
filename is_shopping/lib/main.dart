@@ -36,7 +36,7 @@ class _TextListDisplayer extends State<TextListDisplayer> {
                   '${shoppingItem.itemName} ${shoppingItem.emoji}',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 70,
+                    fontSize: 24,
                     color: Colors.purple,
                   ),
                 ),
