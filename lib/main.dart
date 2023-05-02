@@ -110,7 +110,7 @@ class _TextListDisplayer extends State<TextListDisplayer> {
   String checkItemForEmoji(ShoppingItem item) {
     String retVal = '🛒';
     EmojiDictionary().dictionary.forEach((key, value) {
-      if (key == item.itemName) {
+      if (key == item.itemName?.toLowerCase()) {
         retVal = value;
       }
     });

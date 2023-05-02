@@ -1,7 +1,33 @@
 class EmojiDictionary {
   Map<String, String> dictionary = {
     'your mom': '😳',
-    'fagyi': '🍦',
-    'croc': '🐊'
+    'ice crean': '🍦',
+    'ketchup': '🍅',
+    'tea': '🍵',
+    'coffee': '☕',
+    'chicken': '🐔',
+    'pasta': '🍝',
+    'chesse': '🧀',
+    'pizza': '🍕',
+    'milk': '🐄',
+    'pork': '🐖',
+    'beef': '🐄',
+    'gum': '🫧',
+    'boba': '🧋',
+    'fish': '🐟',
+    'sushi': '🍣',
+    'salt': '🧂',
+    'burger': '🍔',
+    'bacon': '🥓',
+    'meat': '🥩',
+    'fruit': '🍎',
+    'beer': '🍺',
+    'rice': '🍚',
+    'tp': '🧻',
+    'monster': '⚡',
+    'hell': '⚡',
+    'energy': '⚡',
+    'redbull': '⚡',
+    'snacks': '🍿'
   };
 }
