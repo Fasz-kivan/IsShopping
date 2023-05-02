@@ -76,4 +76,28 @@ class _TextListDisplayer extends State<TextListDisplayer> {
       ),
     );
   }
+  TextEditingController controller = TextEditingController();
+  Future showAddDialog() => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Add new item ➕"),
+          content: TextFormField(
+            autofocus: true,
+            decoration: const InputDecoration(
+                hintText: "//TODO random item from past lists?"),
+            controller: controller,
+          ),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  setState(() {
+                    addItemToList(
+                        ShoppingItem(itemName: controller.text, emoji: '🛒'));
+                    controller.text = '';
+                  });
+                },
+                child: const Text("Add"))
+          ],
+        ),
+      );
 }
