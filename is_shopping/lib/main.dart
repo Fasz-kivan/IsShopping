@@ -76,6 +76,7 @@ class _TextListDisplayer extends State<TextListDisplayer> {
       ),
     );
   }
+
   TextEditingController controller = TextEditingController();
   Future showAddDialog() => showDialog(
         context: context,
@@ -100,4 +101,21 @@ class _TextListDisplayer extends State<TextListDisplayer> {
           ],
         ),
       );
+
+  void addItemToList(ShoppingItem item) {
+    item.emoji = checkItemForEmoji(item);
+
+    shoppingList.add(item);
+    Navigator.of(context).pop();
+  }
+
+  String checkItemForEmoji(ShoppingItem item) {
+    String retVal = '🛒';
+    EmojiDictionary().dictionary.forEach((key, value) {
+      if (key == item.itemName) {
+        retVal = value;
+      }
+    });
+    return retVal;
+  }
 }
