@@ -3,7 +3,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Dar
+name: Dart and Flutter build
 
 on:
   push:
