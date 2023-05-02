@@ -54,7 +54,8 @@ class _TextListDisplayer extends State<TextListDisplayer> {
         title: const Text("IsShopping"),
         centerTitle: true,
       ),
-      body: Center(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 70),
         child: Column(
           children: shoppingList
               .map((shoppingItem) => shoppingItemTemplate(shoppingItem))
