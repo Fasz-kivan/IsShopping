@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:is_shopping/emoji_dictionary.dart';
 import 'shopping_item.dart';
