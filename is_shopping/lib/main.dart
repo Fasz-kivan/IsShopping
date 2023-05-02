@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:is_shopping/emoji_dictionary.dart';
 import 'shopping_item.dart';
 
 final myController = TextEditingController();
@@ -65,7 +68,7 @@ class _TextListDisplayer extends State<TextListDisplayer> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
-            shoppingList.add(ShoppingItem(itemName: "Cum", emoji: "🤍"));
+            showAddDialog();
           });
         },
         backgroundColor: Colors.deepOrange,
