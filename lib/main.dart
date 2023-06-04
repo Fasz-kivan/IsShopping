@@ -126,5 +126,4 @@ class _TextListDisplayer extends State<TextListDisplayer> {
 
     return emojiFound;
   }
-  }
 }
