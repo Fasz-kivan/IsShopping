@@ -109,7 +109,7 @@ class _TextListDisplayer extends State<TextListDisplayer> {
     Navigator.of(context).pop();
   }
 
-  String checkItemForEmoji(ShoppingItem item) {
+  ShoppingItem checkItemForEmoji(ShoppingItem item) {
     var emojiFound = '';
 
     }
@@ -120,6 +120,6 @@ class _TextListDisplayer extends State<TextListDisplayer> {
       }
     });
 
-    return emojiFound;
+    return ShoppingItem(itemName: item.itemName, emoji: emojiFound);
   }
 }
