@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:is_shopping/emoji_dictionary.dart';
 import 'shopping_item.dart';
+import 'package:dart_emoji/dart_emoji.dart';
 
 final myController = TextEditingController();
 
