@@ -14,11 +14,7 @@ class TextListDisplayer extends StatefulWidget {
 }
 
 class _TextListDisplayer extends State<TextListDisplayer> {
-  List<ShoppingItem> shoppingList = [
-    ShoppingItem(itemName: "Milk", emoji: "🐄"),
-    ShoppingItem(itemName: "Cheese", emoji: "🧀"),
-    ShoppingItem(itemName: "Pizza", emoji: "🍕"),
-  ];
+  List<ShoppingItem> shoppingList = [];
 
   // todo this shit ugly, fix
   static final RegExp emojiRegex = RegExp(
