@@ -122,7 +122,10 @@ class _TextListDisplayer extends State<TextListDisplayer> {
       }
 
       return ShoppingItem(
-          itemName: item.itemName.replaceAll(emojiRegex, '').trim(),
+          itemName: item.itemName
+              .replaceAll(emojiRegex, '')
+              .trim()
+              .replaceAll(RegExp(' {2,}'), ' '),
           emoji: emojiFound);
     }
 
