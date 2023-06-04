@@ -117,7 +117,10 @@ class _TextListDisplayer extends State<TextListDisplayer> {
     var emojiFound = '';
 
     if (item.itemName.contains(emojiRegex)) {
-      emojiFound = emojiRegex.firstMatch(item.itemName)?.group(0) ?? '';
+      for (var match in emojiRegex.allMatches(item.itemName)) {
+        emojiFound += match.group(0).toString();
+      }
+
       return ShoppingItem(
           itemName: item.itemName.replaceFirst(emojiRegex, ''),
           emoji: emojiFound);
