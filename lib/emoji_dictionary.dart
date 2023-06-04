@@ -7,7 +7,7 @@ class EmojiDictionary {
     'coffee': '☕',
     'chicken': '🐔',
     'pasta': '🍝',
-    'chesse': '🧀',
+    'cheese': '🧀',
     'pizza': '🍕',
     'milk': '🐄',
     'pork': '🐖',
