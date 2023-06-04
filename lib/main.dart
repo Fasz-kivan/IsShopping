@@ -16,7 +16,6 @@ class TextListDisplayer extends StatefulWidget {
 class _TextListDisplayer extends State<TextListDisplayer> {
   List<ShoppingItem> shoppingList = [];
 
-  // todo this shit ugly, fix
   static final RegExp emojiRegex = RegExp(
     r'[\u{1F300}-\u{1F5FF}' // Miscellaneous Symbols and Pictographs
     r'\u{1F600}-\u{1F64F}' // Emoticons
@@ -91,8 +90,7 @@ class _TextListDisplayer extends State<TextListDisplayer> {
           title: const Text("Add new item ➕"),
           content: TextFormField(
             autofocus: true,
-            decoration: const InputDecoration(
-                hintText: "TODO random item from past lists?"),
+            decoration: const InputDecoration(hintText: "Do Shopping 🛒"),
             controller: controller,
           ),
           actions: [
