@@ -90,9 +90,11 @@ class _TextListDisplayer extends State<TextListDisplayer> {
             TextButton(
                 onPressed: () {
                   setState(() {
-                    addItemToList(
-                        ShoppingItem(itemName: controller.text, emoji: '🛒'));
-                    controller.text = '';
+                    if (controller.text.isNotEmpty) {
+                      addItemToList(
+                          ShoppingItem(itemName: controller.text, emoji: ''));
+                      controller.text = '';
+                    }
                   });
                 },
                 child: const Text("Add"))
