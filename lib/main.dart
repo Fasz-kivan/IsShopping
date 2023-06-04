@@ -110,12 +110,20 @@ class _TextListDisplayer extends State<TextListDisplayer> {
   }
 
   String checkItemForEmoji(ShoppingItem item) {
-    String retVal = '🛒';
+    var emojiFound = '';
+    var parser = EmojiParser();
+
+    if (parser.getEmoji(item.itemName) != Emoji.None) {
+      return parser.getEmoji(item.itemName).toString();
+    }
+
     EmojiDictionary().dictionary.forEach((key, value) {
-      if (key == item.itemName?.toLowerCase()) {
-        retVal = value;
+      if (item.itemName.toLowerCase().contains(key)) {
+        emojiFound = value;
       }
     });
-    return retVal;
+
+    return emojiFound;
+  }
   }
 }
