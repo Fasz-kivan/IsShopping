@@ -103,7 +103,7 @@ class _TextListDisplayer extends State<TextListDisplayer> {
       );
 
   void addItemToList(ShoppingItem item) {
-    item.emoji = checkItemForEmoji(item);
+    item = checkItemForEmoji(item);
 
     shoppingList.add(item);
     Navigator.of(context).pop();
@@ -111,10 +111,7 @@ class _TextListDisplayer extends State<TextListDisplayer> {
 
   String checkItemForEmoji(ShoppingItem item) {
     var emojiFound = '';
-    var parser = EmojiParser();
 
-    if (parser.getEmoji(item.itemName) != Emoji.None) {
-      return parser.getEmoji(item.itemName).toString();
     }
 
     EmojiDictionary().dictionary.forEach((key, value) {
