@@ -84,7 +84,7 @@ class _TextListDisplayer extends State<TextListDisplayer> {
           content: TextFormField(
             autofocus: true,
             decoration: const InputDecoration(
-                hintText: "//TODO random item from past lists?"),
+                hintText: "TODO random item from past lists?"),
             controller: controller,
           ),
           actions: [
