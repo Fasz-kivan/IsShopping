@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:is_shopping/emoji_dictionary.dart';
+import 'package:is_shopping/emoji_dictionary_eng.dart';
 import 'shopping_item.dart';
 
 final myController = TextEditingController();
@@ -132,7 +132,7 @@ class _TextListDisplayer extends State<TextListDisplayer> {
           emoji: emojiFound);
     }
 
-    EmojiDictionary().dictionary.forEach((key, value) {
+    EmojiDictionaryEng().dictionary.forEach((key, value) {
       if (item.itemName.toLowerCase().contains(key)) {
         emojiFound = value;
       }
