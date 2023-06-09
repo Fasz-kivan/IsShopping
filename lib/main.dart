@@ -138,6 +138,8 @@ class _TextListDisplayer extends State<TextListDisplayer> {
       }
     });
 
-    return ShoppingItem(itemName: item.itemName, emoji: emojiFound);
+    return ShoppingItem(
+        itemName: item.itemName.replaceAll(RegExp(' {2,}'), ' '),
+        emoji: emojiFound == '' ? '🛒' : emojiFound);
   }
 }
