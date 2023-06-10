@@ -1,4 +1,4 @@
-class EmojiDictionary {
+class EmojiDictionaryEng {
   Map<String, String> dictionary = {
     'your mom': '😳',
     'ice crean': '🍦',
@@ -7,7 +7,7 @@ class EmojiDictionary {
     'coffee': '☕',
     'chicken': '🐔',
     'pasta': '🍝',
-    'chesse': '🧀',
+    'cheese': '🧀',
     'pizza': '🍕',
     'milk': '🐄',
     'pork': '🐖',
