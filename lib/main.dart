@@ -30,7 +30,7 @@ class _TextListDisplayer extends State<TextListDisplayer> {
 
   Widget shoppingItemTemplate(shoppingItem) {
     return Card(
-      elevation: 8,
+      elevation: 4,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
@@ -40,6 +40,7 @@ class _TextListDisplayer extends State<TextListDisplayer> {
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
+              //todo make the emoji align to the right
               Center(
                 child: Text(
                   '${shoppingItem.itemName} ${shoppingItem.emoji}',
@@ -64,7 +65,7 @@ class _TextListDisplayer extends State<TextListDisplayer> {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 70),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         child: Column(
           children: shoppingList
               .map((shoppingItem) => shoppingItemTemplate(shoppingItem))
