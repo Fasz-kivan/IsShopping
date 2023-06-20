@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:is_shopping/emoji_dictionary_eng.dart';
 import 'shopping_item.dart';
 
@@ -37,18 +38,33 @@ class _TextListDisplayer extends State<TextListDisplayer> {
       margin: const EdgeInsets.fromLTRB(8, 8, 8, 8),
       child: Padding(
         padding: const EdgeInsets.all(12),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              //todo make the emoji align to the right
-              Center(
-                child: Text(
-                  '${shoppingItem.itemName} ${shoppingItem.emoji}',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                    color: Colors.purple,
+              Checkbox(
+                value: false,
+                onChanged: (value) => setItemToChecked(shoppingItem),
+              ),
+              Expanded(
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Text(
+                    '${shoppingItem.itemName}',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                      color: Colors.purple,
+                    ),
+                    textAlign: TextAlign.center, // Center align the text
                   ),
+                ),
+              ),
+              Text(
+                '${shoppingItem.emoji}',
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                  color: Colors.purple,
                 ),
               ),
             ]),
@@ -102,6 +118,10 @@ class _TextListDisplayer extends State<TextListDisplayer> {
                       addItemToList(
                           ShoppingItem(itemName: controller.text, emoji: ''));
                       controller.text = '';
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Item name can't be empty"),
+                      ));
                     }
                   });
                 },
@@ -142,5 +162,9 @@ class _TextListDisplayer extends State<TextListDisplayer> {
     return ShoppingItem(
         itemName: item.itemName.replaceAll(RegExp(' {2,}'), ' '),
         emoji: emojiFound == '' ? '🛒' : emojiFound);
+  }
+
+  bool setItemToChecked(ShoppingItem item) {
+    return true;
   }
 }
