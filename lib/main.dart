@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:is_shopping/emoji_dictionary_eng.dart';
 import 'shopping_item.dart';
 
