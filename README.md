@@ -8,4 +8,5 @@ IsShopping by faszkivan, a lightweight shopping list with a touch of flavor via 
 
 ## Screenshot of the app's early concept
 
-![image](https://user-images.githubusercontent.com/55391231/235773933-63b20b68-d3d5-44b5-8528-c9d937822e2f.png)
+![image](https://github.com/Fasz-kivan/IsShopping/assets/55391231/8e4e7116-8b6e-4e22-9d52-95f7f1939804)
+
