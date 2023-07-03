@@ -30,7 +30,7 @@ class _TextListDisplayer extends State<TextListDisplayer> {
 
   Widget shoppingItemTemplate(ShoppingItem shoppingItem) {
     return Card(
-      elevation: 4,
+      elevation: shoppingItem.isChecked ? 2 : 6,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
@@ -48,18 +48,22 @@ class _TextListDisplayer extends State<TextListDisplayer> {
                 child: Container(
                   alignment: Alignment.center,
                   child: Text(
-                    '${shoppingItem.itemName}',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                      color: Colors.purple,
-                    ),
+                    shoppingItem.itemName,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                        color: shoppingItem.isChecked
+                            ? Colors.grey
+                            : Colors.purple,
+                        decoration: shoppingItem.isChecked
+                            ? TextDecoration.lineThrough
+                            : TextDecoration.none),
                     textAlign: TextAlign.center, // Center align the text
                   ),
                 ),
               ),
               Text(
-                '${shoppingItem.emoji}',
+                shoppingItem.emoji,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 24,
