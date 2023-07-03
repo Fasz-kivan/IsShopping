@@ -28,27 +28,46 @@ class _TextListDisplayer extends State<TextListDisplayer> {
     unicode: true,
   );
 
-  Widget shoppingItemTemplate(shoppingItem) {
+  Widget shoppingItemTemplate(ShoppingItem shoppingItem) {
     return Card(
-      elevation: 4,
+      elevation: shoppingItem.isChecked ? 2 : 6,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
       margin: const EdgeInsets.fromLTRB(8, 8, 8, 8),
       child: Padding(
         padding: const EdgeInsets.all(12),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              //todo make the emoji align to the right
-              Center(
-                child: Text(
-                  '${shoppingItem.itemName} ${shoppingItem.emoji}',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                    color: Colors.purple,
+              Checkbox(
+                value: shoppingItem.isChecked,
+                onChanged: (value) => setItemToChecked(shoppingItem),
+              ),
+              Expanded(
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Text(
+                    shoppingItem.itemName,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                        color: shoppingItem.isChecked
+                            ? Colors.grey
+                            : Colors.purple,
+                        decoration: shoppingItem.isChecked
+                            ? TextDecoration.lineThrough
+                            : TextDecoration.none),
+                    textAlign: TextAlign.center, // Center align the text
                   ),
+                ),
+              ),
+              Text(
+                shoppingItem.emoji,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                  color: Colors.purple,
                 ),
               ),
             ]),
@@ -102,6 +121,10 @@ class _TextListDisplayer extends State<TextListDisplayer> {
                       addItemToList(
                           ShoppingItem(itemName: controller.text, emoji: ''));
                       controller.text = '';
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Item name can't be empty"),
+                      ));
                     }
                   });
                 },
@@ -142,5 +165,11 @@ class _TextListDisplayer extends State<TextListDisplayer> {
     return ShoppingItem(
         itemName: item.itemName.replaceAll(RegExp(' {2,}'), ' '),
         emoji: emojiFound == '' ? '🛒' : emojiFound);
+  }
+
+  void setItemToChecked(ShoppingItem item) {
+    setState(() {
+      item.isChecked = !item.isChecked;
+    });
   }
 }
