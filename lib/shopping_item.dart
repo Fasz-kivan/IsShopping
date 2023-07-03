@@ -3,5 +3,6 @@ class ShoppingItem {
   String emoji;
   bool isChecked;
 
-  ShoppingItem({required this.itemName, required this.emoji, this.isChecked = false});
+  ShoppingItem(
+      {required this.itemName, required this.emoji, this.isChecked = false});
 }
