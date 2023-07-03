@@ -13,7 +13,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           java-version: '11'
-      - uses: subosito/flutter-action@v3
+      - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
       - run: flutter pub get
