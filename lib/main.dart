@@ -28,7 +28,7 @@ class _TextListDisplayer extends State<TextListDisplayer> {
     unicode: true,
   );
 
-  Widget shoppingItemTemplate(shoppingItem) {
+  Widget shoppingItemTemplate(ShoppingItem shoppingItem) {
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(
@@ -41,7 +41,7 @@ class _TextListDisplayer extends State<TextListDisplayer> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Checkbox(
-                value: false,
+                value: shoppingItem.isChecked,
                 onChanged: (value) => setItemToChecked(shoppingItem),
               ),
               Expanded(
@@ -163,7 +163,9 @@ class _TextListDisplayer extends State<TextListDisplayer> {
         emoji: emojiFound == '' ? '🛒' : emojiFound);
   }
 
-  bool setItemToChecked(ShoppingItem item) {
-    return true;
+  void setItemToChecked(ShoppingItem item) {
+    setState(() {
+      item.isChecked = !item.isChecked;
+    });
   }
 }
