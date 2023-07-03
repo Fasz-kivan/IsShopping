@@ -7,73 +7,20 @@ on:
 
 jobs:
   build:
-    name: Release APK
     runs-on: ubuntu-latest
-
-    steps:      
-    - name: Set up Flutter
-    - uses: actions/checkout@v3
-    - uses: actions/setup-java@v2
-      with:
-        distribution: 'zulu'
-        java-version: '11'
-    - uses: subosito/flutter-action@v2
-      with:
-        channel: 'stable'
-
-    - name: Build APK
-      run: flutter build apk
-      
-    - run: flutter pub get
-    - run: flutter test
-    - run: flutter build apk
-
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        body: |
-          Automatically generated beta release
-        draft: false
-        prerelease: true
-
-    - name: Upload APK
-      id: upload_apk
-      uses: actions/upload-artifact@v2
-      with:
-        name: app-release.apk
-        path: build/app/outputs/apk/release/app-release.apk
-
-    - name: Get APK URL
-      id: get_apk_url
-      run: echo "::set-output name=apk_url::$(echo ${{ steps.upload_apk.outputs.artifact_url }} | cut -d'&' -f1)"
-
-    - name: Add APK URL to Release
-      uses: actions/github-script@v4
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          const artifactURL = '${{ steps.get_apk_url.outputs.apk_url }}';
-          const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
-          const { owner, repo } = github.context.repo;
-          const { data: release } = await octokit.repos.getReleaseByTag({
-            owner,
-            repo,
-            tag: '${{ github.ref }}',
-          });
-          const uploadURL = release.upload_url.split('{')[0];
-          await octokit.repos.uploadReleaseAsset({
-            url: uploadURL,
-            headers: {
-              'content-type': 'application/vnd.android.package-archive',
-              'content-length': fs.statSync(artifactURL).size,
-            },
-            name: 'app-release.apk',
-            file: fs.readFileSync(artifactURL),
-          });
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+      - uses: subosito/flutter-action@v3
+        with:
+          channel: 'stable'
+      - run: flutter pub get
+      - run: flutter format --set-exit-if-changed .
+      - run: flutter analyze .
+      - run: flutter build apk
+      - uses: actions/upload-artifact@v1
+        with:
+          name: release-apk
+          path: build/app/outputs/apk/release/app-release.apk
