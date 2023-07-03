@@ -1,4 +1,4 @@
-name: Flutter Build and Release
+name: Release APK
 
 on:
   push:
@@ -7,17 +7,15 @@ on:
 
 jobs:
   build:
-    name: Build and Release
+    name: Release APK
     runs-on: ubuntu-latest
 
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
+    steps:      
     - name: Set up Flutter
-      uses: subosito/flutter-action@v2
+    - uses: subosito/flutter-action@v2
+    - uses: subosito/flutter-action@v2
       with:
-        flutter-version: stable
+        channel: 'stable'
 
     - name: Build APK
       run: flutter build apk
