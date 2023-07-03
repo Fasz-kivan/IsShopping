@@ -1,0 +1,73 @@
+name: Flutter Build and Release
+
+on:
+  push:
+    branches:
+      - release
+
+jobs:
+  build:
+    name: Build and Release
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: stable
+
+    - name: Build APK
+      run: flutter build apk
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        body: |
+          Automatically generated beta release
+        draft: false
+        prerelease: true
+
+    - name: Upload APK
+      id: upload_apk
+      uses: actions/upload-artifact@v2
+      with:
+        name: app-release.apk
+        path: build/app/outputs/apk/release/app-release.apk
+
+    - name: Get APK URL
+      id: get_apk_url
+      run: echo "::set-output name=apk_url::$(echo ${{ steps.upload_apk.outputs.artifact_url }} | cut -d'&' -f1)"
+
+    - name: Add APK URL to Release
+      uses: actions/github-script@v4
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const artifactURL = '${{ steps.get_apk_url.outputs.apk_url }}';
+          const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
+          const { owner, repo } = github.context.repo;
+          const { data: release } = await octokit.repos.getReleaseByTag({
+            owner,
+            repo,
+            tag: '${{ github.ref }}',
+          });
+          const uploadURL = release.upload_url.split('{')[0];
+          await octokit.repos.uploadReleaseAsset({
+            url: uploadURL,
+            headers: {
+              'content-type': 'application/vnd.android.package-archive',
+              'content-length': fs.statSync(artifactURL).size,
+            },
+            name: 'app-release.apk',
+            file: fs.readFileSync(artifactURL),
+          });
