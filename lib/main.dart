@@ -10,6 +10,7 @@ class TextListDisplayer extends StatefulWidget {
   const TextListDisplayer({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _TextListDisplayer createState() => _TextListDisplayer();
 }
 
