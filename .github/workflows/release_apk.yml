@@ -13,7 +13,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           java-version: '11'
-          distribution: oracle
+          distribution: 'microsoft'
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
