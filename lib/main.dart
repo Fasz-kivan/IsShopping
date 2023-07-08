@@ -5,7 +5,10 @@ import 'package:is_shopping/item_storage.dart';
 
 final myController = TextEditingController();
 
-void main() => runApp(const MaterialApp(home: MainScreenDisplayer()));
+void main() => runApp(MaterialApp(
+      home: const MainScreenDisplayer(),
+      theme: ThemeData(fontFamily: 'Segore'),
+    ));
 
 class MainScreenDisplayer extends StatefulWidget {
   const MainScreenDisplayer({super.key});
@@ -73,15 +76,15 @@ class MainScreen extends State<MainScreenDisplayer> {
                       child: Text(
                         shoppingItem.itemName,
                         style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24,
-                          color: shoppingItem.isChecked
-                              ? Colors.grey
-                              : Colors.purple,
-                          decoration: shoppingItem.isChecked
-                              ? TextDecoration.lineThrough
-                              : TextDecoration.none,
-                        ),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 26,
+                            color: shoppingItem.isChecked
+                                ? Colors.grey
+                                : Colors.purple,
+                            decoration: shoppingItem.isChecked
+                                ? TextDecoration.lineThrough
+                                : TextDecoration.none,
+                            fontFamily: "Comfortaa"),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -89,10 +92,10 @@ class MainScreen extends State<MainScreenDisplayer> {
                   Text(
                     shoppingItem.emoji,
                     style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                      color: Colors.purple,
-                    ),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                        color: Colors.purple,
+                        fontFamily: "Segore"),
                   ),
                 ],
               ),
@@ -136,7 +139,7 @@ class MainScreen extends State<MainScreenDisplayer> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          title: const Text("Add new item ➕"),
+          title: const Text("✅ Add new item"),
           content: TextFormField(
             autofocus: true,
             decoration: const InputDecoration(hintText: "Do Shopping 🛒"),
@@ -227,7 +230,9 @@ class MainScreen extends State<MainScreenDisplayer> {
       items: [
         const PopupMenuItem(
           value: 'edit',
-          child: Text('✏️ Edit'),
+          child: Text(
+            '✏️ Edit',
+          ),
         ),
         const PopupMenuItem(
           value: 'delete',
@@ -259,7 +264,7 @@ class MainScreen extends State<MainScreenDisplayer> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
-              title: const Text('Edit Item ✏️'),
+              title: const Text('Edit Item 📝'),
               content: TextField(
                 onChanged: (value) {
                   editedText =
