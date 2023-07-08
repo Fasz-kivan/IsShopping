@@ -38,56 +38,59 @@ class _MainScreen extends State<MainScreenDisplayer> {
   }
 
   Widget shoppingItemTemplate(ShoppingItem shoppingItem) {
-    return GestureDetector(
-      onTap: () {
-        setItemToChecked(shoppingItem);
-      },
-      child: Card(
-        elevation: shoppingItem.isChecked ? 2 : 6,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        margin: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Checkbox(
-                value: shoppingItem.isChecked,
-                onChanged: (value) => setItemToChecked(shoppingItem),
-              ),
-              Expanded(
-                child: Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    shoppingItem.itemName,
-                    style: TextStyle(
+    return Listener(
+        onPointerDown: (_) {},
+        child: GestureDetector(
+          onTap: () {
+            setItemToChecked(shoppingItem);
+          },
+          child: Card(
+            elevation: shoppingItem.isChecked ? 2 : 6,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            margin: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Checkbox(
+                    value: shoppingItem.isChecked,
+                    onChanged: (value) => setItemToChecked(shoppingItem),
+                  ),
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: Text(
+                        shoppingItem.itemName,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                          color: shoppingItem.isChecked
+                              ? Colors.grey
+                              : Colors.purple,
+                          decoration: shoppingItem.isChecked
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    shoppingItem.emoji,
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 24,
-                      color:
-                          shoppingItem.isChecked ? Colors.grey : Colors.purple,
-                      decoration: shoppingItem.isChecked
-                          ? TextDecoration.lineThrough
-                          : TextDecoration.none,
+                      color: Colors.purple,
                     ),
-                    textAlign: TextAlign.center,
                   ),
-                ),
+                ],
               ),
-              Text(
-                shoppingItem.emoji,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24,
-                  color: Colors.purple,
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   @override
