@@ -120,6 +120,14 @@ class MainScreen extends State<MainScreenDisplayer> {
               fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+              icon: const Icon(Icons.delete_forever),
+              onPressed: () => setState(() {
+                    shoppingList
+                        .removeWhere((element) => element.isChecked == true);
+                  })),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
