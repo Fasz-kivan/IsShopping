@@ -5,18 +5,19 @@ import 'item_storage.dart';
 
 final myController = TextEditingController();
 
-void main() => runApp(const MaterialApp(home: TextListDisplayer()));
+void main() => runApp(const MaterialApp(home: MainScreenDisplayer()));
 
-class TextListDisplayer extends StatefulWidget {
-  const TextListDisplayer({super.key});
+class MainScreenDisplayer extends StatefulWidget {
+  const MainScreenDisplayer({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _TextListDisplayer createState() => _TextListDisplayer();
+  _MainScreen createState() => _MainScreen();
 }
 
-class _TextListDisplayer extends State<TextListDisplayer> {
+class _MainScreen extends State<MainScreenDisplayer> {
   List<ShoppingItem> shoppingList = [];
+
+  Offset _longPressPosition = Offset.zero;
 
   static final RegExp emojiRegex = RegExp(
     r'[\u{1F300}-\u{1F5FF}' // Miscellaneous Symbols and Pictographs
