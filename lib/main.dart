@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:is_shopping/emoji_dictionary_eng.dart';
 import 'shopping_item.dart';
+import 'item_storage.dart';
 
 final myController = TextEditingController();
 
@@ -28,6 +29,12 @@ class _TextListDisplayer extends State<TextListDisplayer> {
     r']',
     unicode: true,
   );
+
+  @override
+  void initState() {
+    super.initState();
+    initializeShoppingList();
+  }
 
   Widget shoppingItemTemplate(ShoppingItem shoppingItem) {
     return GestureDetector(
@@ -145,6 +152,8 @@ class _TextListDisplayer extends State<TextListDisplayer> {
 
     shoppingList.add(item);
     Navigator.of(context).pop();
+
+    storeShoppingItems(shoppingList);
   }
 
   ShoppingItem checkItemForEmoji(ShoppingItem item) {
@@ -177,6 +186,13 @@ class _TextListDisplayer extends State<TextListDisplayer> {
   void setItemToChecked(ShoppingItem item) {
     setState(() {
       item.isChecked = !item.isChecked;
+    });
+  }
+
+  Future<void> initializeShoppingList() async {
+    List<ShoppingItem> retrievedItems = await retrieveShoppingItems();
+    setState(() {
+      shoppingList = retrievedItems;
     });
   }
 }
