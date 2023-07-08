@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:is_shopping/emoji_dictionary_eng.dart';
-import 'shopping_item.dart';
-import 'item_storage.dart';
+import 'package:is_shopping/shopping_item.dart';
+import 'package:is_shopping/item_storage.dart';
 
 final myController = TextEditingController();
 
@@ -11,10 +11,10 @@ class MainScreenDisplayer extends StatefulWidget {
   const MainScreenDisplayer({super.key});
 
   @override
-  _MainScreen createState() => _MainScreen();
+  MainScreen createState() => MainScreen();
 }
 
-class _MainScreen extends State<MainScreenDisplayer> {
+class MainScreen extends State<MainScreenDisplayer> {
   List<ShoppingItem> shoppingList = [];
 
   Offset _longPressPosition = Offset.zero;
