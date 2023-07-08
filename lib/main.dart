@@ -207,4 +207,38 @@ class _MainScreen extends State<MainScreenDisplayer> {
       shoppingList = retrievedItems;
     });
   }
+  void _showContextMenu(BuildContext context, ShoppingItem shoppingItem) async {
+    final selectedOption = await showMenu(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      context: context,
+      position: RelativeRect.fromLTRB(
+        _longPressPosition.dx,
+        _longPressPosition.dy,
+        MediaQuery.of(context).size.width - _longPressPosition.dx,
+        MediaQuery.of(context).size.height - _longPressPosition.dy,
+      ),
+      items: [
+        const PopupMenuItem(
+          value: 'edit',
+          child: Text('✏️ Edit'),
+        ),
+        const PopupMenuItem(
+          value: 'delete',
+          child: Text('🗑️ Delete'),
+        ),
+      ],
+    );
+
+    // Handle the selected option
+    if (selectedOption == 'edit') {
+      updateItemDialog(shoppingItem);
+    } else if (selectedOption == 'delete') {
+      setState(() {
+        shoppingList.remove(shoppingItem);
+      });
+      storeShoppingItems(shoppingList);
+    }
+  }
 }
