@@ -44,6 +44,14 @@ class _MainScreen extends State<MainScreenDisplayer> {
           onTap: () {
             setItemToChecked(shoppingItem);
           },
+          onLongPress: () {
+            _showContextMenu(context, shoppingItem);
+          },
+          onLongPressStart: (details) {
+            setState(() {
+              _longPressPosition = details.globalPosition;
+            });
+          },
           child: Card(
             elevation: shoppingItem.isChecked ? 2 : 6,
             shape: RoundedRectangleBorder(
