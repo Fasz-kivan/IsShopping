@@ -241,4 +241,48 @@ class _MainScreen extends State<MainScreenDisplayer> {
       storeShoppingItems(shoppingList);
     }
   }
+  void updateItemDialog(ShoppingItem item) {
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        String editedText = ''; // Variable to store the edited text
+
+        return Builder(
+          builder: (BuildContext context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              title: const Text('Edit Item ✏️'),
+              content: TextField(
+                onChanged: (value) {
+                  editedText =
+                      value; // Update the edited text as the user types
+                },
+              ),
+              actions: [
+                TextButton(
+                  child: const Text('Cancel'),
+                  onPressed: () {
+                    Navigator.of(dialogContext)
+                        .pop(); // Close the dialog using the dialogContext
+                  },
+                ),
+                TextButton(
+                  child: const Text('Save'),
+                  onPressed: () {
+                    setState(() {
+                      item = updateItem(item, editedText);
+                    });
+                    Navigator.of(context).pop();
+                    storeShoppingItems(shoppingList);
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
 }
