@@ -5,7 +5,10 @@ import 'package:is_shopping/item_storage.dart';
 
 final myController = TextEditingController();
 
-void main() => runApp(const MaterialApp(home: MainScreenDisplayer()));
+void main() => runApp(MaterialApp(
+      home: const MainScreenDisplayer(),
+      theme: ThemeData(fontFamily: 'Segore'),
+    ));
 
 class MainScreenDisplayer extends StatefulWidget {
   const MainScreenDisplayer({super.key});
@@ -63,9 +66,13 @@ class MainScreen extends State<MainScreenDisplayer> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Checkbox(
-                    value: shoppingItem.isChecked,
-                    onChanged: (value) => setItemToChecked(shoppingItem),
+                  Transform.scale(
+                    scale: 1,
+                    child: Checkbox(
+                      shape: const CircleBorder(),
+                      value: shoppingItem.isChecked,
+                      onChanged: (value) => setItemToChecked(shoppingItem),
+                    ),
                   ),
                   Expanded(
                     child: Container(
@@ -73,15 +80,15 @@ class MainScreen extends State<MainScreenDisplayer> {
                       child: Text(
                         shoppingItem.itemName,
                         style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24,
-                          color: shoppingItem.isChecked
-                              ? Colors.grey
-                              : Colors.purple,
-                          decoration: shoppingItem.isChecked
-                              ? TextDecoration.lineThrough
-                              : TextDecoration.none,
-                        ),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 26,
+                            color: shoppingItem.isChecked
+                                ? Colors.grey
+                                : Colors.purple,
+                            decoration: shoppingItem.isChecked
+                                ? TextDecoration.lineThrough
+                                : TextDecoration.none,
+                            fontFamily: "Manrope"),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -89,10 +96,10 @@ class MainScreen extends State<MainScreenDisplayer> {
                   Text(
                     shoppingItem.emoji,
                     style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                      color: Colors.purple,
-                    ),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                        color: Colors.purple,
+                        fontFamily: "Segore"),
                   ),
                 ],
               ),
@@ -105,8 +112,13 @@ class MainScreen extends State<MainScreenDisplayer> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.orangeAccent,
-        title: const Text("IsShopping"),
+        title: const Text(
+          "IsShopping",
+          style: TextStyle(
+              fontFamily: "Manrope",
+              color: Colors.black,
+              fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -136,12 +148,12 @@ class MainScreen extends State<MainScreenDisplayer> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          title: const Text("Add new item ➕"),
+          title: const Text("✅ Add new item"),
           content: TextFormField(
-            autofocus: true,
-            decoration: const InputDecoration(hintText: "Do Shopping 🛒"),
-            controller: controller,
-          ),
+              autofocus: true,
+              decoration: const InputDecoration(hintText: "Do Shopping 🛒"),
+              controller: controller,
+              style: const TextStyle(fontFamily: "Manrope")),
           actions: [
             TextButton(
                 onPressed: () {
@@ -152,12 +164,14 @@ class MainScreen extends State<MainScreenDisplayer> {
                       controller.text = '';
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("Item name can't be empty"),
+                        content: Text("Item name can't be empty",
+                            style: TextStyle(fontFamily: "Manrope")),
                       ));
                     }
                   });
                 },
-                child: const Text("Add"))
+                child:
+                    const Text("Add", style: TextStyle(fontFamily: "Manrope")))
           ],
         ),
       );
@@ -236,7 +250,6 @@ class MainScreen extends State<MainScreenDisplayer> {
       ],
     );
 
-    // Handle the selected option
     if (selectedOption == 'edit') {
       updateItemDialog(shoppingItem);
     } else if (selectedOption == 'delete') {
@@ -251,7 +264,7 @@ class MainScreen extends State<MainScreenDisplayer> {
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
-        String editedText = ''; // Variable to store the edited text
+        String editedText = '';
 
         return Builder(
           builder: (BuildContext context) {
@@ -262,20 +275,24 @@ class MainScreen extends State<MainScreenDisplayer> {
               title: const Text('Edit Item ✏️'),
               content: TextField(
                 onChanged: (value) {
-                  editedText =
-                      value; // Update the edited text as the user types
+                  editedText = value;
                 },
               ),
               actions: [
                 TextButton(
-                  child: const Text('Cancel'),
+                  child: const Text(
+                    'Cancel',
+                    style: TextStyle(fontFamily: "Manrope"),
+                  ),
                   onPressed: () {
-                    Navigator.of(dialogContext)
-                        .pop(); // Close the dialog using the dialogContext
+                    Navigator.of(dialogContext).pop();
                   },
                 ),
                 TextButton(
-                  child: const Text('Save'),
+                  child: const Text(
+                    'Save',
+                    style: TextStyle(fontFamily: "Manrope"),
+                  ),
                   onPressed: () {
                     setState(() {
                       item = updateItem(item, editedText);
