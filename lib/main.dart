@@ -128,6 +128,7 @@ class MainScreen extends State<MainScreenDisplayer> {
               onPressed: () => setState(() {
                     shoppingList
                         .removeWhere((element) => element.isChecked == true);
+                    storeShoppingItems(shoppingList);
                   })),
         ],
       ),
