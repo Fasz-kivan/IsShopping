@@ -112,6 +112,7 @@ class MainScreen extends State<MainScreenDisplayer> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 104, 255, 99),
         title: const Text(
           "IsShopping",
           style: TextStyle(
@@ -120,6 +121,15 @@ class MainScreen extends State<MainScreenDisplayer> {
               fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+              color: Colors.black,
+              icon: const Icon(Icons.delete_forever),
+              onPressed: () => setState(() {
+                    shoppingList
+                        .removeWhere((element) => element.isChecked == true);
+                  })),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -135,7 +145,8 @@ class MainScreen extends State<MainScreenDisplayer> {
             showAddDialog();
           });
         },
-        backgroundColor: Colors.deepOrange,
+        foregroundColor: Colors.black,
+        backgroundColor: const Color.fromARGB(255, 104, 255, 99),
         child: const Icon(Icons.add),
       ),
     );
