@@ -112,6 +112,7 @@ class MainScreen extends State<MainScreenDisplayer> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 104, 255, 99),
         title: const Text(
           "IsShopping",
           style: TextStyle(
@@ -122,6 +123,7 @@ class MainScreen extends State<MainScreenDisplayer> {
         centerTitle: true,
         actions: [
           IconButton(
+              color: Colors.black,
               icon: const Icon(Icons.delete_forever),
               onPressed: () => setState(() {
                     shoppingList
@@ -143,7 +145,8 @@ class MainScreen extends State<MainScreenDisplayer> {
             showAddDialog();
           });
         },
-        backgroundColor: Colors.deepOrange,
+        foregroundColor: Colors.black,
+        backgroundColor: const Color.fromARGB(255, 104, 255, 99),
         child: const Icon(Icons.add),
       ),
     );
