@@ -207,6 +207,7 @@ class _MainScreen extends State<MainScreenDisplayer> {
       shoppingList = retrievedItems;
     });
   }
+
   void _showContextMenu(BuildContext context, ShoppingItem shoppingItem) async {
     final selectedOption = await showMenu(
       shape: RoundedRectangleBorder(
@@ -241,6 +242,7 @@ class _MainScreen extends State<MainScreenDisplayer> {
       storeShoppingItems(shoppingList);
     }
   }
+
   void updateItemDialog(ShoppingItem item) {
     showDialog(
       context: context,
@@ -284,5 +286,14 @@ class _MainScreen extends State<MainScreenDisplayer> {
         );
       },
     );
+  }
+
+  ShoppingItem updateItem(ShoppingItem item, String editedText) {
+    item.emoji =
+        checkItemForEmoji((ShoppingItem(itemName: editedText, emoji: '')))
+            .emoji;
+    item.itemName = editedText;
+
+    return item;
   }
 }
