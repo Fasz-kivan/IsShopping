@@ -133,6 +133,9 @@ class _MainScreen extends State<MainScreenDisplayer> {
   Future showAddDialog() => showDialog(
         context: context,
         builder: (context) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
           title: const Text("Add new item ➕"),
           content: TextFormField(
             autofocus: true,
@@ -199,6 +202,7 @@ class _MainScreen extends State<MainScreenDisplayer> {
     setState(() {
       item.isChecked = !item.isChecked;
     });
+    storeShoppingItems(shoppingList);
   }
 
   Future<void> initializeShoppingList() async {
