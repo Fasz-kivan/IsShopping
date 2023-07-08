@@ -28,6 +28,24 @@ class EmojiDictionaryEng {
     'hell': '⚡',
     'energy': '⚡',
     'redbull': '⚡',
-    'snacks': '🍿'
+    'snacks': '🍿',
+    'beans': '🫘',
+    'corn': '🌽',
+    'chips': '🥔',
+    'sugar': '💎',
+    'butter': '🧈',
+    'bread': '🍞',
+    'burrito': '🌯',
+    'cookie': '🍪',
+    'candy': '🍬',
+    'chocolate': '🍫',
+    'wine': '🍷',
+    'watermelon': '🍉',
+    'strawberry': '🍓',
+    'cherry': '🍒',
+    'peach': '🍑',
+    'banana': '🍌',
+    'carrot': '🥕',
+    'steak': '🥩'
   };
 }
