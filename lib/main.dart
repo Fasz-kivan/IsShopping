@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:is_shopping/emoji_dictionary_eng.dart';
-import 'shopping_item.dart';
+import 'package:is_shopping/shopping_item.dart';
+import 'package:is_shopping/item_storage.dart';
 
 final myController = TextEditingController();
 
-void main() => runApp(const MaterialApp(home: TextListDisplayer()));
+void main() => runApp(const MaterialApp(home: MainScreenDisplayer()));
 
-class TextListDisplayer extends StatefulWidget {
-  const TextListDisplayer({super.key});
+class MainScreenDisplayer extends StatefulWidget {
+  const MainScreenDisplayer({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _TextListDisplayer createState() => _TextListDisplayer();
+  MainScreen createState() => MainScreen();
 }
 
-class _TextListDisplayer extends State<TextListDisplayer> {
+class MainScreen extends State<MainScreenDisplayer> {
   List<ShoppingItem> shoppingList = [];
+
+  Offset _longPressPosition = Offset.zero;
 
   static final RegExp emojiRegex = RegExp(
     r'[\u{1F300}-\u{1F5FF}' // Miscellaneous Symbols and Pictographs
@@ -29,57 +31,74 @@ class _TextListDisplayer extends State<TextListDisplayer> {
     unicode: true,
   );
 
+  @override
+  void initState() {
+    super.initState();
+    initializeShoppingList();
+  }
+
   Widget shoppingItemTemplate(ShoppingItem shoppingItem) {
-    return GestureDetector(
-      onTap: () {
-        setItemToChecked(shoppingItem);
-      },
-      child: Card(
-        elevation: shoppingItem.isChecked ? 2 : 6,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        margin: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Checkbox(
-                value: shoppingItem.isChecked,
-                onChanged: (value) => setItemToChecked(shoppingItem),
-              ),
-              Expanded(
-                child: Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    shoppingItem.itemName,
-                    style: TextStyle(
+    return Listener(
+        onPointerDown: (_) {},
+        child: GestureDetector(
+          onTap: () {
+            setItemToChecked(shoppingItem);
+          },
+          onLongPress: () {
+            _showContextMenu(context, shoppingItem);
+          },
+          onLongPressStart: (details) {
+            setState(() {
+              _longPressPosition = details.globalPosition;
+            });
+          },
+          child: Card(
+            elevation: shoppingItem.isChecked ? 2 : 6,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            margin: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Checkbox(
+                    value: shoppingItem.isChecked,
+                    onChanged: (value) => setItemToChecked(shoppingItem),
+                  ),
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: Text(
+                        shoppingItem.itemName,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                          color: shoppingItem.isChecked
+                              ? Colors.grey
+                              : Colors.purple,
+                          decoration: shoppingItem.isChecked
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    shoppingItem.emoji,
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 24,
-                      color:
-                          shoppingItem.isChecked ? Colors.grey : Colors.purple,
-                      decoration: shoppingItem.isChecked
-                          ? TextDecoration.lineThrough
-                          : TextDecoration.none,
+                      color: Colors.purple,
                     ),
-                    textAlign: TextAlign.center,
                   ),
-                ),
+                ],
               ),
-              Text(
-                shoppingItem.emoji,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24,
-                  color: Colors.purple,
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   @override
@@ -114,6 +133,9 @@ class _TextListDisplayer extends State<TextListDisplayer> {
   Future showAddDialog() => showDialog(
         context: context,
         builder: (context) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
           title: const Text("Add new item ➕"),
           content: TextFormField(
             autofocus: true,
@@ -145,6 +167,8 @@ class _TextListDisplayer extends State<TextListDisplayer> {
 
     shoppingList.add(item);
     Navigator.of(context).pop();
+
+    storeShoppingItems(shoppingList);
   }
 
   ShoppingItem checkItemForEmoji(ShoppingItem item) {
@@ -178,5 +202,102 @@ class _TextListDisplayer extends State<TextListDisplayer> {
     setState(() {
       item.isChecked = !item.isChecked;
     });
+    storeShoppingItems(shoppingList);
+  }
+
+  Future<void> initializeShoppingList() async {
+    List<ShoppingItem> retrievedItems = await retrieveShoppingItems();
+    setState(() {
+      shoppingList = retrievedItems;
+    });
+  }
+
+  void _showContextMenu(BuildContext context, ShoppingItem shoppingItem) async {
+    final selectedOption = await showMenu(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      context: context,
+      position: RelativeRect.fromLTRB(
+        _longPressPosition.dx,
+        _longPressPosition.dy,
+        MediaQuery.of(context).size.width - _longPressPosition.dx,
+        MediaQuery.of(context).size.height - _longPressPosition.dy,
+      ),
+      items: [
+        const PopupMenuItem(
+          value: 'edit',
+          child: Text('✏️ Edit'),
+        ),
+        const PopupMenuItem(
+          value: 'delete',
+          child: Text('🗑️ Delete'),
+        ),
+      ],
+    );
+
+    // Handle the selected option
+    if (selectedOption == 'edit') {
+      updateItemDialog(shoppingItem);
+    } else if (selectedOption == 'delete') {
+      setState(() {
+        shoppingList.remove(shoppingItem);
+      });
+      storeShoppingItems(shoppingList);
+    }
+  }
+
+  void updateItemDialog(ShoppingItem item) {
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        String editedText = ''; // Variable to store the edited text
+
+        return Builder(
+          builder: (BuildContext context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              title: const Text('Edit Item ✏️'),
+              content: TextField(
+                onChanged: (value) {
+                  editedText =
+                      value; // Update the edited text as the user types
+                },
+              ),
+              actions: [
+                TextButton(
+                  child: const Text('Cancel'),
+                  onPressed: () {
+                    Navigator.of(dialogContext)
+                        .pop(); // Close the dialog using the dialogContext
+                  },
+                ),
+                TextButton(
+                  child: const Text('Save'),
+                  onPressed: () {
+                    setState(() {
+                      item = updateItem(item, editedText);
+                    });
+                    Navigator.of(context).pop();
+                    storeShoppingItems(shoppingList);
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  ShoppingItem updateItem(ShoppingItem item, String editedText) {
+    item.emoji =
+        checkItemForEmoji((ShoppingItem(itemName: editedText, emoji: '')))
+            .emoji;
+    item.itemName = editedText;
+
+    return item;
   }
 }
