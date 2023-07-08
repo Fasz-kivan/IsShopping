@@ -6,8 +6,6 @@
 name: Dart and Flutter build
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
