@@ -11,7 +11,7 @@ void main() => runApp(MaterialApp(
           fontFamily: 'Segoe UI',
           colorScheme: const ColorScheme(
               brightness: Brightness.light,
-              primary: Color(0xff5fd068), //#
+              primary: Color(0xff5fd068),
               onPrimary: Color(0xff4B8673),
               secondary: Color(0xffFD5D6A),
               onSecondary: Color(0xff7F8FF5),
@@ -114,9 +114,7 @@ class MainScreen extends State<MainScreenDisplayer> {
                           Text(
                             shoppingItem.itemName,
                             style: TextStyle(
-                              color: shoppingItem.isChecked
-                                  ? Colors.grey[500]
-                                  : const Color(0xFF1E1E1E),
+                              color: const Color(0xFF1E1E1E),
                               decoration: shoppingItem.isChecked
                                   ? TextDecoration.lineThrough
                                   : TextDecoration.none,
@@ -318,16 +316,44 @@ class MainScreen extends State<MainScreenDisplayer> {
   }
 
   void _showContextMenu(BuildContext context, ShoppingItem shoppingItem) async {
+    final RenderBox overlay =
+        Overlay.of(context).context.findRenderObject() as RenderBox;
+    final Size overlaySize = overlay.size;
+    final Offset topLeft = overlay.localToGlobal(Offset.zero);
+    final Offset bottomRight =
+        topLeft + Offset(overlaySize.width, overlaySize.height);
+
+    final double dx = _longPressPosition.dx.clamp(topLeft.dx, bottomRight.dx);
+    final double dy = _longPressPosition.dy.clamp(topLeft.dy, bottomRight.dy);
+
+    final double distanceToTopLeft = (_longPressPosition - topLeft).distance;
+    final double distanceToTopRight = Offset(dx - bottomRight.dx, 0).distance;
+
+    final List<double> distances = [
+      distanceToTopLeft,
+      distanceToTopRight,
+    ];
+
+    final int closestCornerIndex = distances.indexOf(distances
+        .reduce((minValue, value) => minValue > value + 48 ? value : minValue));
+
+    const Radius cMenuCorner = Radius.circular(15.0);
+
+    final borderRadius = BorderRadius.only(
+      topLeft: closestCornerIndex == 0 ? Radius.zero : cMenuCorner,
+      topRight: closestCornerIndex == 1 ? Radius.zero : cMenuCorner,
+      bottomLeft: cMenuCorner,
+      bottomRight: cMenuCorner,
+    );
+
     final selectedOption = await showMenu(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: borderRadius),
       context: context,
       position: RelativeRect.fromLTRB(
-        _longPressPosition.dx,
-        _longPressPosition.dy,
-        MediaQuery.of(context).size.width - _longPressPosition.dx,
-        MediaQuery.of(context).size.height - _longPressPosition.dy,
+        dx,
+        dy,
+        bottomRight.dx - dx,
+        bottomRight.dy - dy,
       ),
       items: [
         const PopupMenuItem(
