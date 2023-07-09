@@ -10,6 +10,8 @@ Future<void> storeShoppingItems(List<ShoppingItem> items) async {
       'itemName': item.itemName,
       'emoji': item.emoji,
       'isChecked': item.isChecked,
+      'addedAt': item.addedAt.toString(),
+      'count': item.count
     };
   }).toList();
 
@@ -26,10 +28,11 @@ Future<List<ShoppingItem>> retrieveShoppingItems() async {
 
     List<ShoppingItem> items = decodedItems.map((item) {
       return ShoppingItem(
-        itemName: item['itemName'],
-        emoji: item['emoji'],
-        isChecked: item['isChecked'],
-      );
+          itemName: item['itemName'],
+          emoji: item['emoji'],
+          isChecked: item['isChecked'],
+          addedAt: DateTime.parse(item['addedAt']),
+          count: item['count']);
     }).toList();
 
     return items;
