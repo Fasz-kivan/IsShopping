@@ -213,7 +213,20 @@ class MainScreen extends State<MainScreenDisplayer> {
               padding: const EdgeInsets.only(left: 15),
               child: IconButton(
                 icon: const Icon(Icons.checklist),
-                onPressed: () {},
+                onPressed: () => setState(() {
+                  bool flipValue;
+                  if (shoppingList
+                      .every((element) => element.isChecked == true)) {
+                    flipValue = false;
+                  } else {
+                    flipValue = true;
+                  }
+
+                  for (var item in shoppingList) {
+                    item.isChecked = flipValue;
+                    storeShoppingItems(shoppingList);
+                  }
+                }),
               ),
             ),
             const Spacer(),
