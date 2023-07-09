@@ -94,25 +94,25 @@ class MainScreen extends State<MainScreenDisplayer> {
                         borderRadius: BorderRadius.circular(15),
                       ),
                     ),
-                    child: Center(
-                      child: Text(
-                        shoppingItem.emoji,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 40,
-                          fontFamily: 'Segoe UI',
-                          fontWeight: FontWeight.w400,
+                    child: Transform.translate(
+                      offset: const Offset(0, 4),
+                      child: Center(
+                        child: Text(
+                          shoppingItem.emoji,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 40,
+                            fontFamily: 'Segoe UI',
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
                       ),
                     ),
                   ),
                   Expanded(
                     child: Container(
-                      alignment: Alignment.centerLeft,
                       padding: const EdgeInsets.only(left: 10),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
@@ -191,27 +191,48 @@ class MainScreen extends State<MainScreenDisplayer> {
         overlays: [SystemUiOverlay.top]);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        title: const Text(
-          "IsShopping",
-          style: TextStyle(
-              fontFamily: "Manrope",
-              color: Colors.white,
-              fontWeight: FontWeight.bold),
+      bottomNavigationBar: BottomAppBar(
+        height: 60,
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 8.0,
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 15),
+              child: IconButton(
+                icon: const Icon(Icons.checklist),
+                onPressed: () {},
+              ),
+            ),
+            const Spacer(),
+            Padding(
+              padding: const EdgeInsets.only(right: 15),
+              child: IconButton(
+                icon: const Icon(Icons.delete_forever),
+                onPressed: () => setState(() {
+                  shoppingList
+                      .removeWhere((element) => element.isChecked == true);
+                  storeShoppingItems(shoppingList);
+                }),
+                iconSize: 24,
+              ),
+            ),
+          ],
         ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-              color: Colors.black,
-              icon: const Icon(Icons.delete_forever),
-              onPressed: () => setState(() {
-                    shoppingList
-                        .removeWhere((element) => element.isChecked == true);
-                    storeShoppingItems(shoppingList);
-                  })),
-        ],
       ),
+      floatingActionButton: FloatingActionButton(
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          elevation: 2,
+          child: const Icon(
+            Icons.add_shopping_cart,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            setState(() {
+              showAddDialog();
+            });
+          }),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         child: Column(
@@ -219,18 +240,6 @@ class MainScreen extends State<MainScreenDisplayer> {
               .map(
                   (shoppingItem) => shoppingItemTemplate(context, shoppingItem))
               .toList(),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            showAddDialog();
-          });
-        },
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        child: const Icon(
-          Icons.add_shopping_cart,
-          color: Colors.white,
         ),
       ),
     );
@@ -251,13 +260,20 @@ class MainScreen extends State<MainScreenDisplayer> {
               style: const TextStyle(fontFamily: "Manrope")),
           actions: [
             TextButton(
+                style: const ButtonStyle(),
                 onPressed: () {
                   setState(() {
                     if (controller.text.isNotEmpty) {
                       addItemToList(
-                          ShoppingItem(itemName: controller.text, emoji: ''));
+                        ShoppingItem(
+                            itemName: controller.text,
+                            emoji: '',
+                            addedAt: DateTime.now(),
+                            count: 1),
+                      );
                       controller.text = '';
                     } else {
+                      Navigator.of(context).pop();
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text("Item name can't be empty",
                             style: TextStyle(fontFamily: "Manrope")),
@@ -293,7 +309,8 @@ class MainScreen extends State<MainScreenDisplayer> {
               .replaceAll(emojiRegex, '')
               .trim()
               .replaceAll(RegExp(' {2,}'), ' '),
-          emoji: emojiFound);
+          emoji: emojiFound,
+          addedAt: item.addedAt);
     }
 
     EmojiDictionaryEng().dictionary.forEach((key, value) {
@@ -304,7 +321,8 @@ class MainScreen extends State<MainScreenDisplayer> {
 
     return ShoppingItem(
         itemName: item.itemName.replaceAll(RegExp(' {2,}'), ' '),
-        emoji: emojiFound == '' ? '🛒' : emojiFound);
+        emoji: emojiFound == '' ? '🛒' : emojiFound,
+        addedAt: item.addedAt);
   }
 
   void setItemToChecked(ShoppingItem item) {
@@ -433,9 +451,9 @@ class MainScreen extends State<MainScreenDisplayer> {
   }
 
   ShoppingItem updateItem(ShoppingItem item, String editedText) {
-    item.emoji =
-        checkItemForEmoji((ShoppingItem(itemName: editedText, emoji: '')))
-            .emoji;
+    item.emoji = checkItemForEmoji((ShoppingItem(
+            itemName: editedText, emoji: '', addedAt: item.addedAt)))
+        .emoji;
     item.itemName = editedText;
 
     return item;
