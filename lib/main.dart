@@ -268,7 +268,7 @@ class MainScreen extends State<MainScreenDisplayer> {
           Row(
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 15, top: 30),
+                padding: const EdgeInsets.only(left: 15, top: 55),
                 child: Text(
                   "Good ${greeting()}, $username",
                   style: const TextStyle(
@@ -277,22 +277,6 @@ class MainScreen extends State<MainScreenDisplayer> {
                     fontFamily: 'Manrope',
                     fontWeight: FontWeight.w900,
                   ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 20, top: 35),
-                child: Container(
-                  alignment: Alignment.centerRight,
-                  width: 24,
-                  height: 24,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: const BoxDecoration(),
-                  child: const Stack(children: [
-                    Icon(
-                      Icons.color_lens,
-                      color: Colors.white,
-                    )
-                  ]),
                 ),
               ),
             ],
@@ -396,9 +380,7 @@ class MainScreen extends State<MainScreenDisplayer> {
     var emojiFound = '';
 
     if (item.itemName.contains(emojiRegex)) {
-      for (var match in emojiRegex.allMatches(item.itemName)) {
-        emojiFound += match.group(0).toString();
-      }
+      emojiFound = emojiRegex.firstMatch(item.itemName).toString();
 
       return ShoppingItem(
           itemName: item.itemName
