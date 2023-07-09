@@ -76,7 +76,7 @@ class MainScreen extends State<MainScreenDisplayer> {
             child: Container(
               width: 500,
               padding: const EdgeInsets.all(10),
-              margin: const EdgeInsets.fromLTRB(15, 0, 15, 15),
+              margin: const EdgeInsets.fromLTRB(15, 15 / 2, 15, 15 / 2),
               decoration: ShapeDecoration(
                 color: Colors.white,
                 shape: RoundedRectangleBorder(
