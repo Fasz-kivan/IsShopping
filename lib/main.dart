@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:is_shopping/emoji_dictionary_eng.dart';
 import 'package:is_shopping/shopping_item.dart';
 import 'package:is_shopping/item_storage.dart';
@@ -54,6 +56,8 @@ class MainScreen extends State<MainScreenDisplayer> {
   }
 
   Widget shoppingItemTemplate(BuildContext context, ShoppingItem shoppingItem) {
+    String formattedDate = DateFormat.MMMEd().format(shoppingItem.addedAt);
+
     return Listener(
         onPointerDown: (_) {},
         child: GestureDetector(
@@ -125,9 +129,9 @@ class MainScreen extends State<MainScreenDisplayer> {
                           ),
                           Container(
                             padding: const EdgeInsets.only(top: 5),
-                            child: const Text(
-                              'Added: 2036. Aug. 12.',
-                              style: TextStyle(
+                            child: Text(
+                              "Added: $formattedDate",
+                              style: const TextStyle(
                                 color: Color(0xFF808080),
                                 fontSize: 12,
                                 fontFamily: 'Manrope',
