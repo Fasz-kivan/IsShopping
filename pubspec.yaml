@@ -76,7 +76,7 @@ flutter:
       - family: "Comfortaa"
         fonts:
           - asset: assets/fonts/Comfortaa.ttf
-      - family: "Segore"
+      - family: "Segoe UI"
         fonts:
           - asset: assets/fonts/Segore.ttf
       - family: "Quicksand"
