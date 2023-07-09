@@ -7,7 +7,20 @@ final myController = TextEditingController();
 
 void main() => runApp(MaterialApp(
       home: const MainScreenDisplayer(),
-      theme: ThemeData(fontFamily: 'Segore'),
+      theme: ThemeData(
+          fontFamily: 'Segoe UI',
+          colorScheme: const ColorScheme(
+              brightness: Brightness.light,
+              primary: Color(0xff5fd068), //#
+              onPrimary: Color(0xff4B8673),
+              secondary: Color(0xffFD5D6A),
+              onSecondary: Color(0xff7F8FF5),
+              error: Color.fromARGB(255, 255, 0, 0),
+              onError: Color.fromARGB(255, 255, 0, 0),
+              background: Color(0xffF6FBF4),
+              onBackground: Color(0xffF3F3F3),
+              surface: Color.fromARGB(255, 255, 0, 0),
+              onSurface: Color.fromARGB(255, 255, 0, 0))),
     ));
 
 class MainScreenDisplayer extends StatefulWidget {
