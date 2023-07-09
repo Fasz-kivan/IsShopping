@@ -258,14 +258,85 @@ class MainScreen extends State<MainScreenDisplayer> {
             });
           }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-        child: Column(
-          children: shoppingList
-              .map(
-                  (shoppingItem) => shoppingItemTemplate(context, shoppingItem))
-              .toList(),
-        ),
+      body: Stack(
+        children: [
+          Container(
+            color: Theme.of(context).colorScheme.primary,
+            height: double.infinity,
+            width: double.infinity,
+          ),
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 15, top: 30),
+                child: Text(
+                  "Good ${greeting()}, $username",
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 25,
+                    fontFamily: 'Manrope',
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 20, top: 35),
+                child: Container(
+                  alignment: Alignment.centerRight,
+                  width: 24,
+                  height: 24,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: const BoxDecoration(),
+                  child: const Stack(children: [
+                    Icon(
+                      Icons.color_lens,
+                      color: Colors.white,
+                    )
+                  ]),
+                ),
+              ),
+            ],
+          ),
+          Positioned.fill(
+            top: 150, // Adjust the top padding as needed
+            child: Container(
+              decoration: ShapeDecoration(
+                color: Theme.of(context).colorScheme.background,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+                  ),
+                ),
+              ),
+              child: SingleChildScrollView(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                child: Column(
+                  children: [
+                    const Text(
+                      'Shopping List',
+                      style: TextStyle(
+                        color: Color(0xFF1E1E1E),
+                        fontSize: 20,
+                        fontFamily: 'Manrope',
+                        fontWeight: FontWeight.w700,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                    const SizedBox(
+                        height:
+                            10), // Add spacing between the text and shopping items
+                    ...shoppingList
+                        .map((shoppingItem) =>
+                            shoppingItemTemplate(context, shoppingItem))
+                        .toList(),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
