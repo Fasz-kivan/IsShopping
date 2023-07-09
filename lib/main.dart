@@ -53,7 +53,7 @@ class MainScreen extends State<MainScreenDisplayer> {
     initializeShoppingList();
   }
 
-  Widget shoppingItemTemplate(ShoppingItem shoppingItem) {
+  Widget shoppingItemTemplate(BuildContext context, ShoppingItem shoppingItem) {
     return Listener(
         onPointerDown: (_) {},
         child: GestureDetector(
