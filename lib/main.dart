@@ -68,51 +68,113 @@ class MainScreen extends State<MainScreenDisplayer> {
               _longPressPosition = details.globalPosition;
             });
           },
-          child: Card(
-            elevation: shoppingItem.isChecked ? 2 : 6,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            margin: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-            child: Padding(
-              padding: const EdgeInsets.all(12),
+          child: Center(
+            child: Container(
+              width: 500,
+              padding: const EdgeInsets.all(10),
+              margin: const EdgeInsets.fromLTRB(15, 0, 15, 15),
+              decoration: ShapeDecoration(
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Transform.scale(
-                    scale: 1,
-                    child: Checkbox(
-                      shape: const CircleBorder(),
-                      value: shoppingItem.isChecked,
-                      onChanged: (value) => setItemToChecked(shoppingItem),
+                  Container(
+                    height: 60,
+                    width: 60,
+                    decoration: ShapeDecoration(
+                      color: Theme.of(context).colorScheme.onBackground,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        shoppingItem.emoji,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 40,
+                          fontFamily: 'Segoe UI',
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
                     ),
                   ),
                   Expanded(
                     child: Container(
-                      alignment: Alignment.center,
-                      child: Text(
-                        shoppingItem.itemName,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 26,
-                            color: shoppingItem.isChecked
-                                ? Colors.grey
-                                : Colors.purple,
-                            decoration: shoppingItem.isChecked
-                                ? TextDecoration.lineThrough
-                                : TextDecoration.none,
-                            fontFamily: "Manrope"),
-                        textAlign: TextAlign.center,
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            shoppingItem.itemName,
+                            style: TextStyle(
+                              color: shoppingItem.isChecked
+                                  ? Colors.grey[500]
+                                  : const Color(0xFF1E1E1E),
+                              decoration: shoppingItem.isChecked
+                                  ? TextDecoration.lineThrough
+                                  : TextDecoration.none,
+                              fontFamily: "Manrope",
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.only(top: 5),
+                            child: const Text(
+                              'Added: 2036. Aug. 12.',
+                              style: TextStyle(
+                                color: Color(0xFF808080),
+                                fontSize: 12,
+                                fontFamily: 'Manrope',
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.only(top: 3),
+                            child: const Text(
+                              '3 pcs',
+                              style: TextStyle(
+                                color: Color(0xFF808080),
+                                fontSize: 12,
+                                fontFamily: 'Manrope',
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  Text(
-                    shoppingItem.emoji,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30,
-                        color: Colors.purple,
-                        fontFamily: "Segore"),
+                  Transform.scale(
+                    scale: 1.3,
+                    child: Checkbox(
+                        shape: RoundedRectangleBorder(
+                          side: const BorderSide(
+                              width: 0.50, color: Color(0xFF1E1E1E)),
+                          borderRadius: BorderRadius.circular(90),
+                        ),
+                        side: MaterialStateBorderSide.resolveWith(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.selected)) {
+                              return BorderSide(
+                                  width: 1,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary);
+                            }
+                            return const BorderSide(
+                                width: 1, color: Colors.black);
+                          },
+                        ),
+                        value: shoppingItem.isChecked,
+                        onChanged: (value) => setItemToChecked(shoppingItem)),
                   ),
                 ],
               ),
@@ -124,13 +186,14 @@ class MainScreen extends State<MainScreenDisplayer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 104, 255, 99),
+        backgroundColor: Theme.of(context).colorScheme.primary,
         title: const Text(
           "IsShopping",
           style: TextStyle(
               fontFamily: "Manrope",
-              color: Colors.black,
+              color: Colors.white,
               fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -149,7 +212,8 @@ class MainScreen extends State<MainScreenDisplayer> {
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         child: Column(
           children: shoppingList
-              .map((shoppingItem) => shoppingItemTemplate(shoppingItem))
+              .map(
+                  (shoppingItem) => shoppingItemTemplate(context, shoppingItem))
               .toList(),
         ),
       ),
@@ -159,9 +223,11 @@ class MainScreen extends State<MainScreenDisplayer> {
             showAddDialog();
           });
         },
-        foregroundColor: Colors.black,
-        backgroundColor: const Color.fromARGB(255, 104, 255, 99),
-        child: const Icon(Icons.add),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        child: const Icon(
+          Icons.add_shopping_cart,
+          color: Colors.white,
+        ),
       ),
     );
   }
