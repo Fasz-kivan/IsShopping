@@ -187,6 +187,18 @@ class MainScreen extends State<MainScreenDisplayer> {
 
   @override
   Widget build(BuildContext context) {
+    String username = "Naara";
+    String greeting() {
+      var hour = DateTime.now().hour;
+      if (hour < 12) {
+        return 'Morning';
+      }
+      if (hour < 17) {
+        return 'Afternoon';
+      }
+      return 'Evening';
+    }
+
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: [SystemUiOverlay.top]);
     return Scaffold(
