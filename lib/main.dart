@@ -486,9 +486,24 @@ class MainScreen extends State<MainScreenDisplayer> {
                   ),
                   onPressed: () {
                     setState(() {
-                      item = updateItem(item, editedText);
+                      if (controller.text.isNotEmpty) {
+                        item = updateItem(item, editedText);
+                        controller.text = '';
+
+                        Navigator.of(context).pop();
+                      } else {
+                        Navigator.of(context).pop();
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary,
+                          content: const Text("Item name unchanged",
+                              style: TextStyle(
+                                  fontFamily: "Manrope",
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w900)),
+                        ));
+                      }
                     });
-                    Navigator.of(context).pop();
                     storeShoppingItems(shoppingList);
                   },
                 ),
