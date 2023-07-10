@@ -288,21 +288,31 @@ class MainScreen extends State<MainScreenDisplayer> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 15, top: 55),
-                child: Text(
-                  "Good ${greeting()}, $username",
-                  style: const TextStyle(
+                padding: const EdgeInsets.only(left: 15, top: 30, right: 15),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 50,
+                  decoration: ShapeDecoration(
                     color: Colors.white,
-                    fontSize: 25,
-                    fontFamily: 'Manrope',
-                    fontWeight: FontWeight.w900,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  child: const Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: 15, top: 10, bottom: 10),
+                        child: Icon(Icons.search),
+                      ),
+                    ],
                   ),
                 ),
-              ),
+              )
             ],
           ),
           Positioned.fill(
-            top: 150, // Adjust the top padding as needed
+            top: MediaQuery.of(context).viewPadding.top +
+                165, // Adjust the top padding as needed
             child: Container(
               decoration: ShapeDecoration(
                 color: Theme.of(context).colorScheme.background,
