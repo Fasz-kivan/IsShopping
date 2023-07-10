@@ -18,11 +18,11 @@ void main() => runApp(MaterialApp(
               secondary: Color(0xffFD5D6A),
               onSecondary: Color(0xff7F8FF5),
               error: Color.fromARGB(255, 255, 0, 0),
-              onError: Color.fromARGB(255, 255, 0, 0),
+              onError: Color.fromARGB(255, 255, 116, 116),
               background: Color(0xffF6FBF4),
               onBackground: Color(0xffF3F3F3),
-              surface: Color.fromARGB(255, 255, 0, 0),
-              onSurface: Color.fromARGB(255, 255, 0, 0))),
+              surface: Color(0xFFF5DF99),
+              onSurface: Color(0xFF404040))),
     ));
 
 class MainScreenDisplayer extends StatefulWidget {
