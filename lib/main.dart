@@ -52,6 +52,9 @@ class MainScreen extends State<MainScreenDisplayer> {
   @override
   void initState() {
     super.initState();
+    SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        systemNavigationBarColor: Theme.of(context).colorScheme.primary);
     initializeShoppingList();
   }
 
@@ -199,8 +202,6 @@ class MainScreen extends State<MainScreenDisplayer> {
       return 'Evening';
     }
 
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-        overlays: [SystemUiOverlay.top]);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       bottomNavigationBar: BottomAppBar(
