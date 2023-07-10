@@ -199,6 +199,10 @@ class MainScreen extends State<MainScreenDisplayer> {
       return 'Evening';
     }
 
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.white,
+        systemNavigationBarIconBrightness: Brightness.light,
+        statusBarColor: Colors.transparent));
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       bottomNavigationBar: BottomAppBar(
