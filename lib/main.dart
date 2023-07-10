@@ -52,9 +52,6 @@ class MainScreen extends State<MainScreenDisplayer> {
   @override
   void initState() {
     super.initState();
-    SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        systemNavigationBarColor: Theme.of(context).colorScheme.primary);
     initializeShoppingList();
   }
 
