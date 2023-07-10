@@ -268,8 +268,25 @@ class MainScreen extends State<MainScreenDisplayer> {
             height: double.infinity,
             width: double.infinity,
           ),
-          Row(
+          Column(
             children: [
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      left: 15,
+                      top: MediaQuery.of(context).viewPadding.top + 30),
+                  child: Text(
+                    "Good ${greeting()}, $username",
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 25,
+                      fontFamily: 'Manrope',
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(left: 15, top: 55),
                 child: Text(
