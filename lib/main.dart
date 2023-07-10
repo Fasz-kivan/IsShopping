@@ -203,10 +203,11 @@ class MainScreen extends State<MainScreenDisplayer> {
         systemNavigationBarColor: Colors.white,
         systemNavigationBarIconBrightness: Brightness.light,
         statusBarColor: Colors.transparent));
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       bottomNavigationBar: BottomAppBar(
-        height: 60,
+        height: 50,
         shape: const CircularNotchedRectangle(),
         notchMargin: 8.0,
         child: Row(
