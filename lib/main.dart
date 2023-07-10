@@ -299,19 +299,38 @@ class MainScreen extends State<MainScreenDisplayer> {
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 child: Column(
                   children: [
-                    const Text(
-                      'Shopping List',
-                      style: TextStyle(
-                        color: Color(0xFF1E1E1E),
-                        fontSize: 20,
-                        fontFamily: 'Manrope',
-                        fontWeight: FontWeight.w700,
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15, top: 20),
+                      child: Container(
+                        alignment: Alignment.centerLeft,
+                        child: const Text(
+                          'Shopping List',
+                          style: TextStyle(
+                            color: Color(0xFF1E1E1E),
+                            fontSize: 23,
+                            fontFamily: 'Manrope',
+                            fontWeight: FontWeight.w900,
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
                       ),
-                      textAlign: TextAlign.left,
                     ),
-                    const SizedBox(
-                        height:
-                            10), // Add spacing between the text and shopping items
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5, left: 15),
+                      child: Container(
+                        alignment: Alignment.centerLeft,
+                        child: const Text(
+                          'Long-press the items in the list to edit them',
+                          style: TextStyle(
+                            color: Color(0xFFBFBFBF),
+                            fontSize: 12,
+                            fontFamily: 'Manrope',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
                     ...shoppingList
                         .map((shoppingItem) =>
                             shoppingItemTemplate(context, shoppingItem))
