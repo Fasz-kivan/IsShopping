@@ -144,9 +144,11 @@ class MainScreen extends State<MainScreenDisplayer> {
                           ),
                           Container(
                             padding: const EdgeInsets.only(top: 3),
-                            child: const Text(
-                              '3 pcs',
-                              style: TextStyle(
+                            child: Text(
+                              shoppingItem.count == null
+                                  ? ''
+                                  : '${shoppingItem.count} pcs',
+                              style: const TextStyle(
                                 color: Color(0xFF808080),
                                 fontSize: 12,
                                 fontFamily: 'Manrope',
@@ -192,8 +194,8 @@ class MainScreen extends State<MainScreenDisplayer> {
   Widget build(BuildContext context) {
     String greeting() {
       var hour = DateTime.now().hour;
-      if (username == 'Double tap here to set your username!') {
-        return '';
+      if (username == '') {
+        return 'Double tap here to set your username!';
       }
       if (hour < 12) {
         return 'Good Morning, ';
@@ -214,7 +216,7 @@ class MainScreen extends State<MainScreenDisplayer> {
       bottomNavigationBar: BottomAppBar(
         height: 50,
         shape: const CircularNotchedRectangle(),
-        notchMargin: 8.0,
+        notchMargin: 10,
         child: Row(
           children: [
             Padding(
@@ -373,53 +375,129 @@ class MainScreen extends State<MainScreenDisplayer> {
   }
 
   TextEditingController itemcontroller = TextEditingController();
+  TextEditingController qtycontroller = TextEditingController();
   Future showAddDialog() => showDialog(
         context: context,
         builder: (context) => AlertDialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(30),
           ),
-          title: const Text("✅ Add new item"),
-          content: TextFormField(
-              autofocus: true,
-              decoration: const InputDecoration(hintText: "Do Shopping 🛒"),
-              controller: itemcontroller,
-              style: const TextStyle(fontFamily: "Manrope")),
-          actions: [
-            TextButton(
-                style: const ButtonStyle(),
-                onPressed: () {
-                  setState(() {
-                    if (itemcontroller.text.isNotEmpty) {
-                      addItemToList(
-                        ShoppingItem(
-                            itemName: itemcontroller.text,
-                            emoji: '',
-                            addedAt: DateTime.now(),
-                            count: 1),
-                      );
+          title: const Padding(
+            padding: EdgeInsets.only(left: 5, top: 5),
+            child: Text("✅ Add new item",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                )),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 5, right: 5),
+                child: TextFormField(
+                  autofocus: true,
+                  decoration: InputDecoration(
+                      fillColor: Theme.of(context).colorScheme.onSurface,
+                      hintText: "Item name 🛒",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      )),
+                  controller: itemcontroller,
+                  style: const TextStyle(fontFamily: "Manrope"),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.only(left: 5, right: 5),
+                child: TextFormField(
+                  autofocus: true,
+                  decoration: InputDecoration(
+                      hintText: "Quantiy 💯",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      )),
+                  controller: qtycontroller,
+                  style: const TextStyle(fontFamily: "Manrope"),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    style: ButtonStyle(
+                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                        backgroundColor: MaterialStatePropertyAll(
+                            Theme.of(context).colorScheme.secondary),
+                        foregroundColor:
+                            const MaterialStatePropertyAll(Colors.white),
+                        textStyle: const MaterialStatePropertyAll(TextStyle(
+                            fontFamily: "Manrope",
+                            fontWeight: FontWeight.w900,
+                            fontSize: 15)),
+                        minimumSize:
+                            const MaterialStatePropertyAll(Size(100, 50))),
+                    onPressed: () {
                       itemcontroller.text = '';
-                    } else {
+                      qtycontroller.text = '';
                       Navigator.of(context).pop();
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("Item name can't be empty",
-                            style: TextStyle(fontFamily: "Manrope")),
-                      ));
-                    }
-                  });
-                },
-                child:
-                    const Text("Add", style: TextStyle(fontFamily: "Manrope")))
-          ],
+                    },
+                    child: const Text("Cancel"),
+                  ),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                        backgroundColor: MaterialStatePropertyAll(
+                            Theme.of(context).colorScheme.primary),
+                        foregroundColor:
+                            const MaterialStatePropertyAll(Colors.white),
+                        textStyle: const MaterialStatePropertyAll(TextStyle(
+                            fontFamily: "Manrope",
+                            fontWeight: FontWeight.w900,
+                            fontSize: 15)),
+                        minimumSize:
+                            const MaterialStatePropertyAll(Size(100, 50))),
+                    onPressed: () {
+                      setState(() {
+                        if (itemcontroller.text.isNotEmpty) {
+                          addItemToList(
+                            ShoppingItem(
+                              itemName: itemcontroller.text,
+                              emoji: '',
+                              addedAt: DateTime.now(),
+                              count: int.tryParse(qtycontroller.text),
+                            ),
+                          );
+                          itemcontroller.text = '';
+                          qtycontroller.text = '';
+                          Navigator.of(context).pop();
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                "Item name can't be empty",
+                                style: TextStyle(fontFamily: "Manrope"),
+                              ),
+                            ),
+                          );
+                        }
+                      });
+                    },
+                    child: const Text("Add"),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       );
 
   void addItemToList(ShoppingItem item) {
     item = checkItemForEmoji(item);
-
     shoppingList.add(item);
-    Navigator.of(context).pop();
-
     storeShoppingItems(shoppingList);
   }
 
@@ -437,7 +515,8 @@ class MainScreen extends State<MainScreenDisplayer> {
               .trim()
               .replaceAll(RegExp(' {2,}'), ' '),
           emoji: emojiFound,
-          addedAt: item.addedAt);
+          addedAt: item.addedAt,
+          count: item.count);
     }
 
     EmojiDictionaryEng().dictionary.forEach((key, value) {
@@ -449,7 +528,8 @@ class MainScreen extends State<MainScreenDisplayer> {
     return ShoppingItem(
         itemName: item.itemName.replaceAll(RegExp(' {2,}'), ' '),
         emoji: emojiFound == '' ? '🛒' : emojiFound,
-        addedAt: item.addedAt);
+        addedAt: item.addedAt,
+        count: item.count);
   }
 
   void setItemToChecked(ShoppingItem item) {
@@ -574,7 +654,10 @@ class MainScreen extends State<MainScreenDisplayer> {
 
   ShoppingItem updateItem(ShoppingItem item, String editedText) {
     item.emoji = checkItemForEmoji((ShoppingItem(
-            itemName: editedText, emoji: '', addedAt: item.addedAt)))
+            itemName: editedText,
+            emoji: '',
+            addedAt: item.addedAt,
+            count: item.count)))
         .emoji;
     item.itemName = editedText;
 
