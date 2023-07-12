@@ -374,7 +374,7 @@ class MainScreen extends State<MainScreenDisplayer> {
     );
   }
 
-  TextEditingController controller = TextEditingController();
+  TextEditingController itemcontroller = TextEditingController();
   Future showAddDialog() => showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -385,22 +385,22 @@ class MainScreen extends State<MainScreenDisplayer> {
           content: TextFormField(
               autofocus: true,
               decoration: const InputDecoration(hintText: "Do Shopping 🛒"),
-              controller: controller,
+              controller: itemcontroller,
               style: const TextStyle(fontFamily: "Manrope")),
           actions: [
             TextButton(
                 style: const ButtonStyle(),
                 onPressed: () {
                   setState(() {
-                    if (controller.text.isNotEmpty) {
+                    if (itemcontroller.text.isNotEmpty) {
                       addItemToList(
                         ShoppingItem(
-                            itemName: controller.text,
+                            itemName: itemcontroller.text,
                             emoji: '',
                             addedAt: DateTime.now(),
                             count: 1),
                       );
-                      controller.text = '';
+                      itemcontroller.text = '';
                     } else {
                       Navigator.of(context).pop();
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -429,7 +429,9 @@ class MainScreen extends State<MainScreenDisplayer> {
     var emojiFound = '';
 
     if (item.itemName.contains(emojiRegex)) {
-      emojiFound = emojiRegex.firstMatch(item.itemName).toString();
+      for (var match in emojiRegex.allMatches(item.itemName)) {
+        emojiFound = match.group(0).toString();
+      } //TODO - unlock limitation of 1 emoji in a cleaner way
 
       return ShoppingItem(
           itemName: item.itemName
@@ -459,10 +461,17 @@ class MainScreen extends State<MainScreenDisplayer> {
     storeShoppingItems(shoppingList);
   }
 
-  Future<void> initializeShoppingList() async {
+  Future<void> initShoppingList() async {
     List<ShoppingItem> retrievedItems = await retrieveShoppingItems();
     setState(() {
       shoppingList = retrievedItems;
+    });
+  }
+
+  Future<void> initUsername() async {
+    String retrievedUsername = await retrieveUsername();
+    setState(() {
+      username = retrievedUsername;
     });
   }
 
@@ -499,6 +508,7 @@ class MainScreen extends State<MainScreenDisplayer> {
     }
   }
 
+  TextEditingController updatecontroller = TextEditingController();
   void updateItemDialog(ShoppingItem item) {
     showDialog(
       context: context,
@@ -513,6 +523,7 @@ class MainScreen extends State<MainScreenDisplayer> {
               ),
               title: const Text('Edit Item ✏️'),
               content: TextField(
+                controller: updatecontroller,
                 onChanged: (value) {
                   editedText = value;
                 },
@@ -534,9 +545,9 @@ class MainScreen extends State<MainScreenDisplayer> {
                   ),
                   onPressed: () {
                     setState(() {
-                      if (controller.text.isNotEmpty) {
+                      if (updatecontroller.text.isNotEmpty) {
                         item = updateItem(item, editedText);
-                        controller.text = '';
+                        updatecontroller.text = '';
 
                         Navigator.of(context).pop();
                       } else {
