@@ -1,13 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:is_shopping/emoji_dictionary_eng.dart';
 import 'package:is_shopping/shopping_item.dart';
 import 'package:is_shopping/item_storage.dart';
+import 'package:is_shopping/user_storage.dart';
 
 final myController = TextEditingController();
 
 void main() => runApp(MaterialApp(
       home: const MainScreenDisplayer(),
-      theme: ThemeData(fontFamily: 'Segore'),
+      theme: ThemeData(
+          fontFamily: 'Segoe UI',
+          colorScheme: const ColorScheme(
+              brightness: Brightness.light,
+              primary: Color(0xff5fd068),
+              onPrimary: Color(0xff4B8673),
+              secondary: Color(0xffFD5D6A),
+              onSecondary: Color(0xff7F8FF5),
+              error: Color.fromARGB(255, 255, 0, 0),
+              onError: Color.fromARGB(255, 255, 116, 116),
+              background: Color(0xffF6FBF4),
+              onBackground: Color(0xffF3F3F3),
+              surface: Color(0xFFF5DF99),
+              onSurface: Color(0xFF404040))),
     ));
 
 class MainScreenDisplayer extends StatefulWidget {
@@ -19,6 +35,7 @@ class MainScreenDisplayer extends StatefulWidget {
 
 class MainScreen extends State<MainScreenDisplayer> {
   List<ShoppingItem> shoppingList = [];
+  String username = "";
 
   Offset _longPressPosition = Offset.zero;
 
@@ -37,10 +54,13 @@ class MainScreen extends State<MainScreenDisplayer> {
   @override
   void initState() {
     super.initState();
-    initializeShoppingList();
+    initShoppingList();
+    initUsername();
   }
 
-  Widget shoppingItemTemplate(ShoppingItem shoppingItem) {
+  Widget shoppingItemTemplate(BuildContext context, ShoppingItem shoppingItem) {
+    String formattedDate = DateFormat.MMMEd().format(shoppingItem.addedAt);
+
     return Listener(
         onPointerDown: (_) {},
         child: GestureDetector(
@@ -55,51 +75,127 @@ class MainScreen extends State<MainScreenDisplayer> {
               _longPressPosition = details.globalPosition;
             });
           },
-          child: Card(
-            elevation: shoppingItem.isChecked ? 2 : 6,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            margin: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-            child: Padding(
-              padding: const EdgeInsets.all(12),
+          child: Center(
+            child: Container(
+              width: 500,
+              padding: const EdgeInsets.all(10),
+              margin: const EdgeInsets.fromLTRB(10, 15 / 2, 10, 15 / 2),
+              decoration: ShapeDecoration(
+                color: shoppingItem.isChecked
+                    ? Theme.of(context).colorScheme.onBackground
+                    : Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Transform.scale(
-                    scale: 1,
-                    child: Checkbox(
-                      shape: const CircleBorder(),
-                      value: shoppingItem.isChecked,
-                      onChanged: (value) => setItemToChecked(shoppingItem),
+                  Container(
+                    height: 60,
+                    width: 60,
+                    decoration: ShapeDecoration(
+                      color: Theme.of(context).colorScheme.onBackground,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                    child: Transform.translate(
+                      offset: const Offset(0, 4),
+                      child: Center(
+                        child: Text(
+                          shoppingItem.emoji,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 40,
+                            fontFamily: 'Segoe UI',
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                   Expanded(
                     child: Container(
-                      alignment: Alignment.center,
-                      child: Text(
-                        shoppingItem.itemName,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 26,
-                            color: shoppingItem.isChecked
-                                ? Colors.grey
-                                : Colors.purple,
-                            decoration: shoppingItem.isChecked
-                                ? TextDecoration.lineThrough
-                                : TextDecoration.none,
-                            fontFamily: "Manrope"),
-                        textAlign: TextAlign.center,
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            shoppingItem.itemName,
+                            style: TextStyle(
+                              color: const Color(0xFF1E1E1E),
+                              decoration: shoppingItem.isChecked
+                                  ? TextDecoration.lineThrough
+                                  : TextDecoration.none,
+                              fontFamily: "Manrope",
+                              fontSize: 15,
+                              fontWeight: shoppingItem.isChecked
+                                  ? FontWeight.w200
+                                  : FontWeight.w700,
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.only(top: 5),
+                            child: Text(
+                              "Added: $formattedDate",
+                              style: TextStyle(
+                                color: const Color(0xFF808080),
+                                fontSize: 12,
+                                decoration: shoppingItem.isChecked
+                                    ? TextDecoration.lineThrough
+                                    : TextDecoration.none,
+                                fontFamily: 'Manrope',
+                                fontWeight: shoppingItem.isChecked
+                                    ? FontWeight.w200
+                                    : FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.only(top: 3),
+                            child: Text(
+                              shoppingItem.count == null
+                                  ? ''
+                                  : '${shoppingItem.count} pcs',
+                              style: TextStyle(
+                                color: const Color(0xFF808080),
+                                fontSize: 12,
+                                decoration: shoppingItem.isChecked
+                                    ? TextDecoration.lineThrough
+                                    : TextDecoration.none,
+                                fontFamily: 'Manrope',
+                                fontWeight: shoppingItem.isChecked
+                                    ? FontWeight.w200
+                                    : FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  Text(
-                    shoppingItem.emoji,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30,
-                        color: Colors.purple,
-                        fontFamily: "Segore"),
+                  Transform.scale(
+                    scale: 1.3,
+                    child: Checkbox(
+                        shape: RoundedRectangleBorder(
+                          side: const BorderSide(
+                              width: 0.50, color: Color(0xFF1E1E1E)),
+                          borderRadius: BorderRadius.circular(90),
+                        ),
+                        side: MaterialStateBorderSide.resolveWith(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.selected)) {
+                              return BorderSide(
+                                  width: 1,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary);
+                            }
+                            return const BorderSide(
+                                width: 1, color: Colors.black);
+                          },
+                        ),
+                        value: shoppingItem.isChecked,
+                        onChanged: (value) => setItemToChecked(shoppingItem)),
                   ),
                 ],
               ),
@@ -110,90 +206,318 @@ class MainScreen extends State<MainScreenDisplayer> {
 
   @override
   Widget build(BuildContext context) {
+    String greeting() {
+      var hour = DateTime.now().hour;
+      if (username == '') {
+        return 'Double tap here to set your username!';
+      }
+      if (hour < 12) {
+        return 'Good Morning, ';
+      }
+      if (hour < 17) {
+        return 'Good Afternoon, ';
+      }
+      return 'Good Evening, ';
+    }
+
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.white,
+        systemNavigationBarIconBrightness: Brightness.light,
+        statusBarColor: Colors.transparent));
+
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 104, 255, 99),
-        title: const Text(
-          "IsShopping",
-          style: TextStyle(
-              fontFamily: "Manrope",
-              color: Colors.black,
-              fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-              color: Colors.black,
-              icon: const Icon(Icons.delete_forever),
-              onPressed: () => setState(() {
-                    shoppingList
-                        .removeWhere((element) => element.isChecked == true);
+      backgroundColor: Theme.of(context).colorScheme.background,
+      bottomNavigationBar: BottomAppBar(
+        height: 50,
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 10,
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 15),
+              child: IconButton(
+                icon: const Icon(Icons.checklist),
+                onPressed: () => setState(() {
+                  bool flipValue;
+                  if (shoppingList
+                      .every((element) => element.isChecked == true)) {
+                    flipValue = false;
+                  } else {
+                    flipValue = true;
+                  }
+
+                  for (var item in shoppingList) {
+                    item.isChecked = flipValue;
                     storeShoppingItems(shoppingList);
-                  })),
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-        child: Column(
-          children: shoppingList
-              .map((shoppingItem) => shoppingItemTemplate(shoppingItem))
-              .toList(),
+                  }
+                }),
+              ),
+            ),
+            const Spacer(),
+            Padding(
+              padding: const EdgeInsets.only(right: 15),
+              child: IconButton(
+                icon: const Icon(Icons.delete_forever),
+                onPressed: () => setState(() {
+                  shoppingList
+                      .removeWhere((element) => element.isChecked == true);
+                  storeShoppingItems(shoppingList);
+                }),
+                iconSize: 24,
+              ),
+            ),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            showAddDialog();
-          });
-        },
-        foregroundColor: Colors.black,
-        backgroundColor: const Color.fromARGB(255, 104, 255, 99),
-        child: const Icon(Icons.add),
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          elevation: 2,
+          child: const Icon(
+            Icons.add_shopping_cart,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            setState(() {
+              showAddDialog();
+            });
+          }),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      body: Stack(
+        children: [
+          Container(
+            color: Theme.of(context).colorScheme.primary,
+            height: double.infinity,
+            width: double.infinity,
+          ),
+          Column(
+            children: [
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    left: 15,
+                    top: MediaQuery.of(context).viewPadding.top,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: InkWell(
+                      onDoubleTap: () {
+                        setUsernameDialog();
+                        storeUsername(username);
+                      },
+                      child: Text(
+                        "${greeting()}$username",
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 25,
+                          fontFamily: 'Manrope',
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 30),
+                  child: Container(
+                    clipBehavior: Clip.antiAlias,
+                    decoration: ShapeDecoration(
+                      color: Theme.of(context).colorScheme.background,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30),
+                          topRight: Radius.circular(30),
+                        ),
+                      ),
+                    ),
+                    child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 10),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 15, top: 20),
+                            child: Container(
+                              alignment: Alignment.centerLeft,
+                              child: const Text(
+                                'Shopping List',
+                                style: TextStyle(
+                                  color: Color(0xFF1E1E1E),
+                                  fontSize: 23,
+                                  fontFamily: 'Manrope',
+                                  fontWeight: FontWeight.w900,
+                                ),
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 5, left: 15),
+                            child: Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                shoppingList.isEmpty
+                                    ? 'Time to add some items! 🛒'
+                                    : 'Tap and hold and item in the list to edit or delete it',
+                                style: const TextStyle(
+                                  color: Color(0xFFBFBFBF),
+                                  fontSize: 12,
+                                  fontFamily: 'Manrope',
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          ...shoppingList
+                              .map((shoppingItem) =>
+                                  shoppingItemTemplate(context, shoppingItem))
+                              .toList(),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
 
-  TextEditingController controller = TextEditingController();
+  TextEditingController itemcontroller = TextEditingController();
+  TextEditingController qtycontroller = TextEditingController();
   Future showAddDialog() => showDialog(
         context: context,
         builder: (context) => AlertDialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(30),
           ),
-          title: const Text("✅ Add new item"),
-          content: TextFormField(
-              autofocus: true,
-              decoration: const InputDecoration(hintText: "Do Shopping 🛒"),
-              controller: controller,
-              style: const TextStyle(fontFamily: "Manrope")),
-          actions: [
-            TextButton(
-                onPressed: () {
-                  setState(() {
-                    if (controller.text.isNotEmpty) {
-                      addItemToList(
-                          ShoppingItem(itemName: controller.text, emoji: ''));
-                      controller.text = '';
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("Item name can't be empty",
-                            style: TextStyle(fontFamily: "Manrope")),
-                      ));
-                    }
-                  });
-                },
-                child:
-                    const Text("Add", style: TextStyle(fontFamily: "Manrope")))
-          ],
+          title: const Padding(
+            padding: EdgeInsets.only(left: 5, top: 5),
+            child: Text("✅ Add new item",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                )),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 5, right: 5),
+                child: TextFormField(
+                  autofocus: true,
+                  decoration: InputDecoration(
+                      fillColor: Theme.of(context).colorScheme.onSurface,
+                      hintText: "Item name 🛒",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      )),
+                  controller: itemcontroller,
+                  style: const TextStyle(fontFamily: "Manrope"),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 5, right: 5),
+                child: TextFormField(
+                  autofocus: true,
+                  decoration: InputDecoration(
+                      hintText: "Quantiy 💯",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      )),
+                  controller: qtycontroller,
+                  style: const TextStyle(fontFamily: "Manrope"),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    style: ButtonStyle(
+                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                        backgroundColor: MaterialStatePropertyAll(
+                            Theme.of(context).colorScheme.secondary),
+                        foregroundColor:
+                            const MaterialStatePropertyAll(Colors.white),
+                        textStyle: const MaterialStatePropertyAll(TextStyle(
+                            fontFamily: "Manrope",
+                            fontWeight: FontWeight.w900,
+                            fontSize: 15)),
+                        minimumSize:
+                            const MaterialStatePropertyAll(Size(110, 50))),
+                    onPressed: () {
+                      itemcontroller.text = '';
+                      qtycontroller.text = '';
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text("Cancel"),
+                  ),
+                  SizedBox(
+                      width: MediaQuery.of(context).size.width < 350 ? 5 : 20),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                        backgroundColor: MaterialStatePropertyAll(
+                            Theme.of(context).colorScheme.primary),
+                        foregroundColor:
+                            const MaterialStatePropertyAll(Colors.white),
+                        textStyle: const MaterialStatePropertyAll(TextStyle(
+                            fontFamily: "Manrope",
+                            fontWeight: FontWeight.w900,
+                            fontSize: 15)),
+                        minimumSize:
+                            const MaterialStatePropertyAll(Size(110, 50))),
+                    onPressed: () {
+                      setState(() {
+                        if (itemcontroller.text.isNotEmpty) {
+                          addItemToList(
+                            ShoppingItem(
+                              itemName: itemcontroller.text,
+                              emoji: '',
+                              addedAt: DateTime.now(),
+                              count: int.tryParse(qtycontroller.text),
+                            ),
+                          );
+                          itemcontroller.text = '';
+                          qtycontroller.text = '';
+                          Navigator.of(context).pop();
+                        } else {
+                          Navigator.of(context).pop();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                "Item name can't be empty ❌",
+                                style: TextStyle(fontFamily: "Manrope"),
+                              ),
+                            ),
+                          );
+                        }
+                      });
+                    },
+                    child: const Text("Add"),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       );
 
   void addItemToList(ShoppingItem item) {
     item = checkItemForEmoji(item);
-
     shoppingList.add(item);
-    Navigator.of(context).pop();
-
     storeShoppingItems(shoppingList);
   }
 
@@ -202,15 +526,17 @@ class MainScreen extends State<MainScreenDisplayer> {
 
     if (item.itemName.contains(emojiRegex)) {
       for (var match in emojiRegex.allMatches(item.itemName)) {
-        emojiFound += match.group(0).toString();
-      }
+        emojiFound = match.group(0).toString();
+      } //TODO - unlock limitation of 1 emoji in a cleaner way
 
       return ShoppingItem(
           itemName: item.itemName
               .replaceAll(emojiRegex, '')
               .trim()
               .replaceAll(RegExp(' {2,}'), ' '),
-          emoji: emojiFound);
+          emoji: emojiFound,
+          addedAt: item.addedAt,
+          count: item.count);
     }
 
     EmojiDictionaryEng().dictionary.forEach((key, value) {
@@ -221,7 +547,9 @@ class MainScreen extends State<MainScreenDisplayer> {
 
     return ShoppingItem(
         itemName: item.itemName.replaceAll(RegExp(' {2,}'), ' '),
-        emoji: emojiFound == '' ? '🛒' : emojiFound);
+        emoji: emojiFound == '' ? '🛒' : emojiFound,
+        addedAt: item.addedAt,
+        count: item.count);
   }
 
   void setItemToChecked(ShoppingItem item) {
@@ -231,18 +559,24 @@ class MainScreen extends State<MainScreenDisplayer> {
     storeShoppingItems(shoppingList);
   }
 
-  Future<void> initializeShoppingList() async {
+  Future<void> initShoppingList() async {
     List<ShoppingItem> retrievedItems = await retrieveShoppingItems();
     setState(() {
       shoppingList = retrievedItems;
     });
   }
 
+  Future<void> initUsername() async {
+    String retrievedUsername = await retrieveUsername();
+    setState(() {
+      username = retrievedUsername;
+    });
+  }
+
   void _showContextMenu(BuildContext context, ShoppingItem shoppingItem) async {
     final selectedOption = await showMenu(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(15.0))),
       context: context,
       position: RelativeRect.fromLTRB(
         _longPressPosition.dx,
@@ -263,70 +597,252 @@ class MainScreen extends State<MainScreenDisplayer> {
     );
 
     if (selectedOption == 'edit') {
+      updateitemcontroller.text = shoppingItem.itemName;
+      updateqtycontroller.text =
+          shoppingItem.count == null ? '' : shoppingItem.count.toString();
       updateItemDialog(shoppingItem);
     } else if (selectedOption == 'delete') {
       setState(() {
         shoppingList.remove(shoppingItem);
       });
+
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Item Deleted 💥",
+            style: TextStyle(fontFamily: "Manrope"),
+          ),
+        ),
+      );
       storeShoppingItems(shoppingList);
     }
   }
 
-  void updateItemDialog(ShoppingItem item) {
-    showDialog(
-      context: context,
-      builder: (BuildContext dialogContext) {
-        String editedText = '';
+  TextEditingController updateitemcontroller = TextEditingController();
+  TextEditingController updateqtycontroller = TextEditingController();
 
-        return Builder(
-          builder: (BuildContext context) {
-            return AlertDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              title: const Text('Edit Item ✏️'),
-              content: TextField(
-                onChanged: (value) {
-                  editedText = value;
-                },
-              ),
-              actions: [
-                TextButton(
-                  child: const Text(
-                    'Cancel',
-                    style: TextStyle(fontFamily: "Manrope"),
-                  ),
-                  onPressed: () {
-                    Navigator.of(dialogContext).pop();
-                  },
+  Future updateItemDialog(ShoppingItem shoppingItem) => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          title: const Padding(
+            padding: EdgeInsets.only(left: 5, top: 5),
+            child: Text("✏️ Edit item",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                )),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 5, right: 5),
+                child: TextFormField(
+                  autofocus: true,
+                  decoration: InputDecoration(
+                      fillColor: Theme.of(context).colorScheme.onSurface,
+                      hintText: "Item name 🛒",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      )),
+                  controller: updateitemcontroller,
+                  style: const TextStyle(fontFamily: "Manrope"),
                 ),
-                TextButton(
-                  child: const Text(
-                    'Save',
-                    style: TextStyle(fontFamily: "Manrope"),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      item = updateItem(item, editedText);
-                    });
-                    Navigator.of(context).pop();
-                    storeShoppingItems(shoppingList);
-                  },
+              ),
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.only(left: 5, right: 5),
+                child: TextFormField(
+                  autofocus: true,
+                  decoration: InputDecoration(
+                      hintText: "Quantiy 💯",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      )),
+                  controller: updateqtycontroller,
+                  style: const TextStyle(fontFamily: "Manrope"),
                 ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    style: ButtonStyle(
+                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                        backgroundColor: MaterialStatePropertyAll(
+                            Theme.of(context).colorScheme.secondary),
+                        foregroundColor:
+                            const MaterialStatePropertyAll(Colors.white),
+                        textStyle: const MaterialStatePropertyAll(TextStyle(
+                            fontFamily: "Manrope",
+                            fontWeight: FontWeight.w900,
+                            fontSize: 15)),
+                        minimumSize:
+                            const MaterialStatePropertyAll(Size(110, 50))),
+                    onPressed: () {
+                      itemcontroller.text = '';
+                      qtycontroller.text = '';
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text("Cancel"),
+                  ),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                        backgroundColor: MaterialStatePropertyAll(
+                            Theme.of(context).colorScheme.primary),
+                        foregroundColor:
+                            const MaterialStatePropertyAll(Colors.white),
+                        textStyle: const MaterialStatePropertyAll(TextStyle(
+                            fontFamily: "Manrope",
+                            fontWeight: FontWeight.w900,
+                            fontSize: 15)),
+                        minimumSize:
+                            const MaterialStatePropertyAll(Size(110, 50))),
+                    onPressed: () {
+                      setState(() {
+                        if (updateitemcontroller.text.isNotEmpty) {
+                          ShoppingItem updatedItem = checkItemForEmoji(
+                              ShoppingItem(
+                                  itemName: updateitemcontroller.text,
+                                  emoji: '',
+                                  addedAt: shoppingItem.addedAt,
+                                  count: shoppingItem.count));
 
-  ShoppingItem updateItem(ShoppingItem item, String editedText) {
-    item.emoji =
-        checkItemForEmoji((ShoppingItem(itemName: editedText, emoji: '')))
-            .emoji;
-    item.itemName = editedText;
+                          shoppingItem.itemName = updatedItem.itemName;
 
-    return item;
-  }
+                          shoppingItem.count = updateitemcontroller.text.isEmpty
+                              ? null
+                              : int.tryParse(updateqtycontroller.text);
+
+                          shoppingItem.emoji = updatedItem.emoji;
+                          Navigator.of(context).pop();
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                "Item name can't be empty ❌",
+                                style: TextStyle(fontFamily: "Manrope"),
+                              ),
+                            ),
+                          );
+                        }
+                      });
+                      storeShoppingItems(shoppingList);
+                    },
+                    child: const Text("Save"),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+
+  TextEditingController usernamecontroller = TextEditingController();
+  Future setUsernameDialog() => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          title: const Padding(
+            padding: EdgeInsets.only(left: 5, top: 5),
+            child: Text("✏️ Edit username",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                )),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 5, right: 5),
+                child: TextFormField(
+                  autofocus: true,
+                  decoration: InputDecoration(
+                      fillColor: Theme.of(context).colorScheme.onSurface,
+                      hintText: "Username 🤔",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      )),
+                  controller: usernamecontroller,
+                  style: const TextStyle(fontFamily: "Manrope"),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    style: ButtonStyle(
+                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                        backgroundColor: MaterialStatePropertyAll(
+                            Theme.of(context).colorScheme.secondary),
+                        foregroundColor:
+                            const MaterialStatePropertyAll(Colors.white),
+                        textStyle: const MaterialStatePropertyAll(TextStyle(
+                            fontFamily: "Manrope",
+                            fontWeight: FontWeight.w900,
+                            fontSize: 15)),
+                        minimumSize:
+                            const MaterialStatePropertyAll(Size(110, 50))),
+                    onPressed: () {
+                      usernamecontroller.text = '';
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text("Cancel"),
+                  ),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                        backgroundColor: MaterialStatePropertyAll(
+                            Theme.of(context).colorScheme.primary),
+                        foregroundColor:
+                            const MaterialStatePropertyAll(Colors.white),
+                        textStyle: const MaterialStatePropertyAll(TextStyle(
+                            fontFamily: "Manrope",
+                            fontWeight: FontWeight.w900,
+                            fontSize: 15)),
+                        minimumSize:
+                            const MaterialStatePropertyAll(Size(110, 50))),
+                    onPressed: () {
+                      setState(() {
+                        if (usernamecontroller.text.isNotEmpty) {
+                          setState(() {
+                            username = usernamecontroller.text;
+                          });
+                          Navigator.of(context).pop();
+                        } else {
+                          Navigator.of(context).pop();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                "Username can't be empty ❌",
+                                style: TextStyle(fontFamily: "Manrope"),
+                              ),
+                            ),
+                          );
+                        }
+                      });
+                      storeUsername(username);
+                    },
+                    child: const Text("Save"),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
 }
