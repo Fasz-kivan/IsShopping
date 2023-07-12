@@ -81,7 +81,9 @@ class MainScreen extends State<MainScreenDisplayer> {
               padding: const EdgeInsets.all(10),
               margin: const EdgeInsets.fromLTRB(10, 15 / 2, 10, 15 / 2),
               decoration: ShapeDecoration(
-                color: Colors.white,
+                color: shoppingItem.isChecked
+                    ? Theme.of(context).colorScheme.onBackground
+                    : Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -127,18 +129,25 @@ class MainScreen extends State<MainScreenDisplayer> {
                                   : TextDecoration.none,
                               fontFamily: "Manrope",
                               fontSize: 15,
-                              fontWeight: FontWeight.w700,
+                              fontWeight: shoppingItem.isChecked
+                                  ? FontWeight.w200
+                                  : FontWeight.w700,
                             ),
                           ),
                           Container(
                             padding: const EdgeInsets.only(top: 5),
                             child: Text(
                               "Added: $formattedDate",
-                              style: const TextStyle(
-                                color: Color(0xFF808080),
+                              style: TextStyle(
+                                color: const Color(0xFF808080),
                                 fontSize: 12,
+                                decoration: shoppingItem.isChecked
+                                    ? TextDecoration.lineThrough
+                                    : TextDecoration.none,
                                 fontFamily: 'Manrope',
-                                fontWeight: FontWeight.w700,
+                                fontWeight: shoppingItem.isChecked
+                                    ? FontWeight.w200
+                                    : FontWeight.w700,
                               ),
                             ),
                           ),
@@ -148,11 +157,16 @@ class MainScreen extends State<MainScreenDisplayer> {
                               shoppingItem.count == null
                                   ? ''
                                   : '${shoppingItem.count} pcs',
-                              style: const TextStyle(
-                                color: Color(0xFF808080),
+                              style: TextStyle(
+                                color: const Color(0xFF808080),
                                 fontSize: 12,
+                                decoration: shoppingItem.isChecked
+                                    ? TextDecoration.lineThrough
+                                    : TextDecoration.none,
                                 fontFamily: 'Manrope',
-                                fontWeight: FontWeight.w700,
+                                fontWeight: shoppingItem.isChecked
+                                    ? FontWeight.w200
+                                    : FontWeight.w700,
                               ),
                             ),
                           ),
