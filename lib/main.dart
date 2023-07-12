@@ -619,146 +619,230 @@ class MainScreen extends State<MainScreenDisplayer> {
     }
   }
 
-  TextEditingController updatecontroller = TextEditingController();
-  void updateItemDialog(ShoppingItem item) {
-    showDialog(
-      context: context,
-      builder: (BuildContext dialogContext) {
-        String editedText = '';
+  TextEditingController updateitemcontroller = TextEditingController();
+  TextEditingController updateqtycontroller = TextEditingController();
 
-        return Builder(
-          builder: (BuildContext context) {
-            return AlertDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              title: const Text('Edit Item ✏️'),
-              content: TextField(
-                controller: updatecontroller,
-                onChanged: (value) {
-                  editedText = value;
-                },
-              ),
-              actions: [
-                TextButton(
-                  child: const Text(
-                    'Cancel',
-                    style: TextStyle(fontFamily: "Manrope"),
-                  ),
-                  onPressed: () {
-                    Navigator.of(dialogContext).pop();
-                  },
+  Future updateItemDialog(ShoppingItem shoppingItem) => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          title: const Padding(
+            padding: EdgeInsets.only(left: 5, top: 5),
+            child: Text("✏️ Edit item",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                )),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 5, right: 5),
+                child: TextFormField(
+                  autofocus: true,
+                  decoration: InputDecoration(
+                      fillColor: Theme.of(context).colorScheme.onSurface,
+                      hintText: "Item name 🛒",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      )),
+                  controller: updateitemcontroller,
+                  style: const TextStyle(fontFamily: "Manrope"),
                 ),
-                TextButton(
-                  child: const Text(
-                    'Save',
-                    style: TextStyle(fontFamily: "Manrope"),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      if (updatecontroller.text.isNotEmpty) {
-                        item = updateItem(item, editedText);
-                        updatecontroller.text = '';
-
-                        Navigator.of(context).pop();
-                      } else {
-                        Navigator.of(context).pop();
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.secondary,
-                          content: const Text("Item name unchanged ❌",
-                              style: TextStyle(
-                                  fontFamily: "Manrope",
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w900)),
-                        ));
-                      }
-                    });
-                    storeShoppingItems(shoppingList);
-                  },
+              ),
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.only(left: 5, right: 5),
+                child: TextFormField(
+                  autofocus: true,
+                  decoration: InputDecoration(
+                      hintText: "Quantiy 💯",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      )),
+                  controller: updateqtycontroller,
+                  style: const TextStyle(fontFamily: "Manrope"),
                 ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    style: ButtonStyle(
+                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                        backgroundColor: MaterialStatePropertyAll(
+                            Theme.of(context).colorScheme.secondary),
+                        foregroundColor:
+                            const MaterialStatePropertyAll(Colors.white),
+                        textStyle: const MaterialStatePropertyAll(TextStyle(
+                            fontFamily: "Manrope",
+                            fontWeight: FontWeight.w900,
+                            fontSize: 15)),
+                        minimumSize:
+                            const MaterialStatePropertyAll(Size(110, 50))),
+                    onPressed: () {
+                      itemcontroller.text = '';
+                      qtycontroller.text = '';
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text("Cancel"),
+                  ),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                        backgroundColor: MaterialStatePropertyAll(
+                            Theme.of(context).colorScheme.primary),
+                        foregroundColor:
+                            const MaterialStatePropertyAll(Colors.white),
+                        textStyle: const MaterialStatePropertyAll(TextStyle(
+                            fontFamily: "Manrope",
+                            fontWeight: FontWeight.w900,
+                            fontSize: 15)),
+                        minimumSize:
+                            const MaterialStatePropertyAll(Size(110, 50))),
+                    onPressed: () {
+                      setState(() {
+                        if (updateitemcontroller.text.isNotEmpty) {
+                          ShoppingItem updatedItem = checkItemForEmoji(
+                              ShoppingItem(
+                                  itemName: updateitemcontroller.text,
+                                  emoji: '',
+                                  addedAt: shoppingItem.addedAt,
+                                  count: shoppingItem.count));
 
-  ShoppingItem updateItem(ShoppingItem item, String editedText) {
-    item.emoji = checkItemForEmoji((ShoppingItem(
-            itemName: editedText,
-            emoji: '',
-            addedAt: item.addedAt,
-            count: item.count)))
-        .emoji;
-    item.itemName = editedText;
+                          shoppingItem.itemName = updatedItem.itemName;
 
-    return item;
-  }
+                          shoppingItem.count = updateitemcontroller.text.isEmpty
+                              ? null
+                              : int.tryParse(updateqtycontroller.text);
+
+                          shoppingItem.emoji = updatedItem.emoji;
+                          Navigator.of(context).pop();
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                "Item name can't be empty ❌",
+                                style: TextStyle(fontFamily: "Manrope"),
+                              ),
+                            ),
+                          );
+                        }
+                      });
+                      storeShoppingItems(shoppingList);
+                    },
+                    child: const Text("Save"),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
 
   TextEditingController usernamecontroller = TextEditingController();
-  void setUsernameDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext dialogContext) {
-        String editedText = '';
-
-        return Builder(
-          builder: (BuildContext context) {
-            return AlertDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              title: const Text('Edit Username 🤔'),
-              content: TextField(
-                controller: usernamecontroller,
-                onChanged: (value) {
-                  editedText = value;
-                },
-              ),
-              actions: [
-                TextButton(
-                  child: const Text(
-                    'Cancel',
-                    style: TextStyle(fontFamily: "Manrope"),
-                  ),
-                  onPressed: () {
-                    Navigator.of(dialogContext).pop();
-                  },
+  Future setUsernameDialog() => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          title: const Padding(
+            padding: EdgeInsets.only(left: 5, top: 5),
+            child: Text("✏️ Edit username",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                )),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 5, right: 5),
+                child: TextFormField(
+                  autofocus: true,
+                  decoration: InputDecoration(
+                      fillColor: Theme.of(context).colorScheme.onSurface,
+                      hintText: "Username 🤔",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      )),
+                  controller: usernamecontroller,
+                  style: const TextStyle(fontFamily: "Manrope"),
                 ),
-                TextButton(
-                  child: const Text(
-                    'Save',
-                    style: TextStyle(fontFamily: "Manrope"),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    style: ButtonStyle(
+                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                        backgroundColor: MaterialStatePropertyAll(
+                            Theme.of(context).colorScheme.secondary),
+                        foregroundColor:
+                            const MaterialStatePropertyAll(Colors.white),
+                        textStyle: const MaterialStatePropertyAll(TextStyle(
+                            fontFamily: "Manrope",
+                            fontWeight: FontWeight.w900,
+                            fontSize: 15)),
+                        minimumSize:
+                            const MaterialStatePropertyAll(Size(110, 50))),
+                    onPressed: () {
+                      usernamecontroller.text = '';
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text("Cancel"),
                   ),
-                  onPressed: () {
-                    setState(() {
-                      if (usernamecontroller.text.isNotEmpty) {
-                        username = editedText;
-                        usernamecontroller.text = '';
-                        Navigator.of(context).pop();
-                      } else {
-                        Navigator.of(context).pop();
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.secondary,
-                          content: const Text("Username unchanged ❌",
-                              style: TextStyle(
-                                  fontFamily: "Manrope",
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w900)),
-                        ));
-                      }
-                    });
-                    storeUsername(username);
-                  },
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
+                  ElevatedButton(
+                    style: ButtonStyle(
+                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                        backgroundColor: MaterialStatePropertyAll(
+                            Theme.of(context).colorScheme.primary),
+                        foregroundColor:
+                            const MaterialStatePropertyAll(Colors.white),
+                        textStyle: const MaterialStatePropertyAll(TextStyle(
+                            fontFamily: "Manrope",
+                            fontWeight: FontWeight.w900,
+                            fontSize: 15)),
+                        minimumSize:
+                            const MaterialStatePropertyAll(Size(110, 50))),
+                    onPressed: () {
+                      setState(() {
+                        if (usernamecontroller.text.isNotEmpty) {
+                          setState(() {
+                            username = usernamecontroller.text;
+                          });
+                          Navigator.of(context).pop();
+                        } else {
+                          Navigator.of(context).pop();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                "Username can't be empty ❌",
+                                style: TextStyle(fontFamily: "Manrope"),
+                              ),
+                            ),
+                          );
+                        }
+                      });
+                      storeUsername(username);
+                    },
+                    child: const Text("Save"),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
 }
