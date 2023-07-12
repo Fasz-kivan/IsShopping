@@ -597,11 +597,24 @@ class MainScreen extends State<MainScreenDisplayer> {
     );
 
     if (selectedOption == 'edit') {
+      updateitemcontroller.text = shoppingItem.itemName;
+      updateqtycontroller.text =
+          shoppingItem.count == null ? '' : shoppingItem.count.toString();
       updateItemDialog(shoppingItem);
     } else if (selectedOption == 'delete') {
       setState(() {
         shoppingList.remove(shoppingItem);
       });
+
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Item Deleted 💥",
+            style: TextStyle(fontFamily: "Manrope"),
+          ),
+        ),
+      );
       storeShoppingItems(shoppingList);
     }
   }
