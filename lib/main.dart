@@ -571,4 +571,69 @@ class MainScreen extends State<MainScreenDisplayer> {
 
     return item;
   }
+
+  TextEditingController usernamecontroller = TextEditingController();
+  void setUsernameDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        String editedText = '';
+
+        return Builder(
+          builder: (BuildContext context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              title: const Text('Edit Username 🤔'),
+              content: TextField(
+                controller: usernamecontroller,
+                onChanged: (value) {
+                  editedText = value;
+                },
+              ),
+              actions: [
+                TextButton(
+                  child: const Text(
+                    'Cancel',
+                    style: TextStyle(fontFamily: "Manrope"),
+                  ),
+                  onPressed: () {
+                    Navigator.of(dialogContext).pop();
+                  },
+                ),
+                TextButton(
+                  child: const Text(
+                    'Save',
+                    style: TextStyle(fontFamily: "Manrope"),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      if (usernamecontroller.text.isNotEmpty) {
+                        username = editedText;
+                        usernamecontroller.text = '';
+                        Navigator.of(context).pop();
+                      } else {
+                        Navigator.of(context).pop();
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary,
+                          content: const Text("Username unchanged ❌",
+                              style: TextStyle(
+                                  fontFamily: "Manrope",
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w900)),
+                        ));
+                      }
+                    });
+                    storeUsername(username);
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
 }
