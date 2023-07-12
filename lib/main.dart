@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:is_shopping/emoji_dictionary_eng.dart';
 import 'package:is_shopping/shopping_item.dart';
 import 'package:is_shopping/item_storage.dart';
+import 'package:is_shopping/user_storage.dart';
 
 final myController = TextEditingController();
 
@@ -34,6 +35,7 @@ class MainScreenDisplayer extends StatefulWidget {
 
 class MainScreen extends State<MainScreenDisplayer> {
   List<ShoppingItem> shoppingList = [];
+  String username = "";
 
   Offset _longPressPosition = Offset.zero;
 
@@ -52,7 +54,8 @@ class MainScreen extends State<MainScreenDisplayer> {
   @override
   void initState() {
     super.initState();
-    initializeShoppingList();
+    initShoppingList();
+    initUsername();
   }
 
   Widget shoppingItemTemplate(BuildContext context, ShoppingItem shoppingItem) {
@@ -187,16 +190,18 @@ class MainScreen extends State<MainScreenDisplayer> {
 
   @override
   Widget build(BuildContext context) {
-    String username = "Naara";
     String greeting() {
       var hour = DateTime.now().hour;
+      if (username == 'Double tap here to set your username!') {
+        return '';
+      }
       if (hour < 12) {
-        return 'Morning';
+        return 'Good Morning, ';
       }
       if (hour < 17) {
-        return 'Afternoon';
+        return 'Good Afternoon, ';
       }
-      return 'Evening';
+      return 'Good Evening, ';
     }
 
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -274,100 +279,93 @@ class MainScreen extends State<MainScreenDisplayer> {
                 alignment: Alignment.centerLeft,
                 child: Padding(
                   padding: EdgeInsets.only(
-                      left: 15,
-                      top: MediaQuery.of(context).viewPadding.top + 30),
-                  child: Text(
-                    "Good ${greeting()}, $username",
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 25,
-                      fontFamily: 'Manrope',
-                      fontWeight: FontWeight.w900,
+                    left: 15,
+                    top: MediaQuery.of(context).viewPadding.top,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: InkWell(
+                      onDoubleTap: () {
+                        setUsernameDialog();
+                        storeUsername(username);
+                      },
+                      child: Text(
+                        "${greeting()}$username",
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 25,
+                          fontFamily: 'Manrope',
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 15, top: 30, right: 15),
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 50,
-                  decoration: ShapeDecoration(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      top: 30), // Adjust the top padding as needed
+                  child: Container(
+                    clipBehavior: Clip.antiAlias,
+                    decoration: ShapeDecoration(
+                      color: Theme.of(context).colorScheme.background,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30),
+                          topRight: Radius.circular(30),
+                        ),
+                      ),
+                    ),
+                    child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 10),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 15, top: 20),
+                            child: Container(
+                              alignment: Alignment.centerLeft,
+                              child: const Text(
+                                'Shopping List',
+                                style: TextStyle(
+                                  color: Color(0xFF1E1E1E),
+                                  fontSize: 23,
+                                  fontFamily: 'Manrope',
+                                  fontWeight: FontWeight.w900,
+                                ),
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 5, left: 15),
+                            child: Container(
+                              alignment: Alignment.centerLeft,
+                              child: const Text(
+                                'Tap and hold and item in the list to edit or delete it',
+                                style: TextStyle(
+                                  color: Color(0xFFBFBFBF),
+                                  fontSize: 12,
+                                  fontFamily: 'Manrope',
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          ...shoppingList
+                              .map((shoppingItem) =>
+                                  shoppingItemTemplate(context, shoppingItem))
+                              .toList(),
+                        ],
+                      ),
                     ),
                   ),
-                  child: const Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 15, top: 10, bottom: 10),
-                        child: Icon(Icons.search),
-                      ),
-                    ],
-                  ),
                 ),
-              )
+              ),
             ],
-          ),
-          Positioned.fill(
-            top: MediaQuery.of(context).viewPadding.top +
-                165, // Adjust the top padding as needed
-            child: Container(
-              decoration: ShapeDecoration(
-                color: Theme.of(context).colorScheme.background,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
-                  ),
-                ),
-              ),
-              child: SingleChildScrollView(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15, top: 20),
-                      child: Container(
-                        alignment: Alignment.centerLeft,
-                        child: const Text(
-                          'Shopping List',
-                          style: TextStyle(
-                            color: Color(0xFF1E1E1E),
-                            fontSize: 23,
-                            fontFamily: 'Manrope',
-                            fontWeight: FontWeight.w900,
-                          ),
-                          textAlign: TextAlign.left,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5, left: 15),
-                      child: Container(
-                        alignment: Alignment.centerLeft,
-                        child: const Text(
-                          'Long-press the items in the list to edit them',
-                          style: TextStyle(
-                            color: Color(0xFFBFBFBF),
-                            fontSize: 12,
-                            fontFamily: 'Manrope',
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    ...shoppingList
-                        .map((shoppingItem) =>
-                            shoppingItemTemplate(context, shoppingItem))
-                        .toList(),
-                  ],
-                ),
-              ),
-            ),
           ),
         ],
       ),
