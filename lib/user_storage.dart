@@ -11,5 +11,5 @@ Future<String> retrieveUsername() async {
 
   String? username = prefs.getString('username');
 
-  return username ?? "Double tap here to set your username!";
+  return username ?? "";
 }

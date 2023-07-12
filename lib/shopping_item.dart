@@ -10,5 +10,5 @@ class ShoppingItem {
       required this.emoji,
       this.isChecked = false,
       required this.addedAt,
-      this.count});
+      required this.count});
 }
