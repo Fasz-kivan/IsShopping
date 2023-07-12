@@ -1,7 +1,7 @@
 class EmojiDictionaryEng {
   Map<String, String> dictionary = {
     'your mom': '😳',
-    'ice crean': '🍦',
+    'ice cream': '🍦',
     'ketchup': '🍅',
     'tea': '🍵',
     'coffee': '☕',
