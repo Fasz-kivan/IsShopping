@@ -320,8 +320,7 @@ class MainScreen extends State<MainScreenDisplayer> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 30), // Adjust the top padding as needed
+                  padding: const EdgeInsets.only(top: 30),
                   child: Container(
                     clipBehavior: Clip.antiAlias,
                     decoration: ShapeDecoration(
@@ -359,9 +358,11 @@ class MainScreen extends State<MainScreenDisplayer> {
                             padding: const EdgeInsets.only(top: 5, left: 15),
                             child: Container(
                               alignment: Alignment.centerLeft,
-                              child: const Text(
-                                'Tap and hold and item in the list to edit or delete it',
-                                style: TextStyle(
+                              child: Text(
+                                shoppingList.isEmpty
+                                    ? 'Time to add some items! 🛒'
+                                    : 'Tap and hold and item in the list to edit or delete it',
+                                style: const TextStyle(
                                   color: Color(0xFFBFBFBF),
                                   fontSize: 12,
                                   fontFamily: 'Manrope',
@@ -421,7 +422,9 @@ class MainScreen extends State<MainScreenDisplayer> {
                   style: const TextStyle(fontFamily: "Manrope"),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(
+                height: 20,
+              ),
               Padding(
                 padding: const EdgeInsets.only(left: 5, right: 5),
                 child: TextFormField(
@@ -437,7 +440,7 @@ class MainScreen extends State<MainScreenDisplayer> {
               ),
               const SizedBox(height: 20),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
                     style: ButtonStyle(
@@ -452,7 +455,7 @@ class MainScreen extends State<MainScreenDisplayer> {
                             fontWeight: FontWeight.w900,
                             fontSize: 15)),
                         minimumSize:
-                            const MaterialStatePropertyAll(Size(100, 50))),
+                            const MaterialStatePropertyAll(Size(110, 50))),
                     onPressed: () {
                       itemcontroller.text = '';
                       qtycontroller.text = '';
@@ -460,6 +463,8 @@ class MainScreen extends State<MainScreenDisplayer> {
                     },
                     child: const Text("Cancel"),
                   ),
+                  SizedBox(
+                      width: MediaQuery.of(context).size.width < 350 ? 5 : 20),
                   ElevatedButton(
                     style: ButtonStyle(
                         shape: MaterialStatePropertyAll(RoundedRectangleBorder(
@@ -473,7 +478,7 @@ class MainScreen extends State<MainScreenDisplayer> {
                             fontWeight: FontWeight.w900,
                             fontSize: 15)),
                         minimumSize:
-                            const MaterialStatePropertyAll(Size(100, 50))),
+                            const MaterialStatePropertyAll(Size(110, 50))),
                     onPressed: () {
                       setState(() {
                         if (itemcontroller.text.isNotEmpty) {
@@ -489,10 +494,11 @@ class MainScreen extends State<MainScreenDisplayer> {
                           qtycontroller.text = '';
                           Navigator.of(context).pop();
                         } else {
+                          Navigator.of(context).pop();
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text(
-                                "Item name can't be empty",
+                                "Item name can't be empty ❌",
                                 style: TextStyle(fontFamily: "Manrope"),
                               ),
                             ),
