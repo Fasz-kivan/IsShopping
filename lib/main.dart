@@ -544,7 +544,7 @@ class MainScreen extends State<MainScreenDisplayer> {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           backgroundColor:
                               Theme.of(context).colorScheme.secondary,
-                          content: const Text("Item name unchanged",
+                          content: const Text("Item name unchanged ❌",
                               style: TextStyle(
                                   fontFamily: "Manrope",
                                   color: Colors.black,
