@@ -3,12 +3,12 @@ class ShoppingItem {
   String emoji;
   bool isChecked;
   DateTime addedAt;
-  int? count;
+  String? quantity;
 
   ShoppingItem(
       {required this.itemName,
       required this.emoji,
       this.isChecked = false,
       required this.addedAt,
-      required this.count});
+      required this.quantity});
 }

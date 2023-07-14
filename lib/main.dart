@@ -154,9 +154,9 @@ class MainScreen extends State<MainScreenDisplayer> {
                           Container(
                             padding: const EdgeInsets.only(top: 3),
                             child: Text(
-                              shoppingItem.count == null
+                              shoppingItem.quantity == null
                                   ? ''
-                                  : '${shoppingItem.count} pcs',
+                                  : '${shoppingItem.quantity}',
                               style: TextStyle(
                                 color: const Color(0xFF808080),
                                 fontSize: 12,
@@ -487,7 +487,7 @@ class MainScreen extends State<MainScreenDisplayer> {
                               itemName: itemcontroller.text,
                               emoji: '',
                               addedAt: DateTime.now(),
-                              count: int.tryParse(qtycontroller.text),
+                              quantity: qtycontroller.text,
                             ),
                           );
                           itemcontroller.text = '';
@@ -536,7 +536,7 @@ class MainScreen extends State<MainScreenDisplayer> {
               .replaceAll(RegExp(' {2,}'), ' '),
           emoji: emojiFound,
           addedAt: item.addedAt,
-          count: item.count);
+          quantity: item.quantity);
     }
 
     EmojiDictionaryEng().dictionary.forEach((key, value) {
@@ -549,7 +549,7 @@ class MainScreen extends State<MainScreenDisplayer> {
         itemName: item.itemName.replaceAll(RegExp(' {2,}'), ' '),
         emoji: emojiFound == '' ? '🛒' : emojiFound,
         addedAt: item.addedAt,
-        count: item.count);
+        quantity: item.quantity);
   }
 
   void setItemToChecked(ShoppingItem item) {
@@ -599,7 +599,7 @@ class MainScreen extends State<MainScreenDisplayer> {
     if (selectedOption == 'edit') {
       updateitemcontroller.text = shoppingItem.itemName;
       updateqtycontroller.text =
-          shoppingItem.count == null ? '' : shoppingItem.count.toString();
+          shoppingItem.quantity == null ? '' : shoppingItem.quantity.toString();
       updateItemDialog(shoppingItem);
     } else if (selectedOption == 'delete') {
       setState(() {
@@ -714,13 +714,14 @@ class MainScreen extends State<MainScreenDisplayer> {
                                   itemName: updateitemcontroller.text,
                                   emoji: '',
                                   addedAt: shoppingItem.addedAt,
-                                  count: shoppingItem.count));
+                                  quantity: shoppingItem.quantity));
 
                           shoppingItem.itemName = updatedItem.itemName;
 
-                          shoppingItem.count = updateitemcontroller.text.isEmpty
-                              ? null
-                              : int.tryParse(updateqtycontroller.text);
+                          shoppingItem.quantity =
+                              updateitemcontroller.text.isEmpty
+                                  ? null
+                                  : updateqtycontroller.text;
 
                           shoppingItem.emoji = updatedItem.emoji;
                           Navigator.of(context).pop();
