@@ -11,7 +11,7 @@ Future<void> storeShoppingItems(List<ShoppingItem> items) async {
       'emoji': item.emoji,
       'isChecked': item.isChecked,
       'addedAt': item.addedAt.toString(),
-      'count': item.count
+      'quantity': item.quantity
     };
   }).toList();
 
@@ -32,7 +32,7 @@ Future<List<ShoppingItem>> retrieveShoppingItems() async {
           emoji: item['emoji'],
           isChecked: item['isChecked'],
           addedAt: DateTime.parse(item['addedAt']),
-          count: item['count']);
+          quantity: item['quantity']);
     }).toList();
 
     return items;
