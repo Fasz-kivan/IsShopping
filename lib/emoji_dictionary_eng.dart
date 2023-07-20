@@ -46,6 +46,9 @@ class EmojiDictionaryEng {
     'peach': '🍑',
     'banana': '🍌',
     'carrot': '🥕',
-    'steak': '🥩'
+    'steak': '🥩',
+    'honey':'🐝',
+    'paper towel':'🧻',
+    'candle':'🕯️',
   };
 }
