@@ -47,8 +47,10 @@ class EmojiDictionaryEng {
     'banana': '🍌',
     'carrot': '🥕',
     'steak': '🥩',
-    'honey':'🐝',
-    'paper towel':'🧻',
-    'candle':'🕯️',
+    'honey': '🐝',
+    'paper towel': '🧻',
+    'candle': '🕯️',
+    'lemon': '🍋',
+    'cereal': '🥣',
   };
 }
