@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:is_shopping/emoji_dictionary_eng.dart';
 import 'package:is_shopping/shopping_item.dart';
 import 'package:is_shopping/item_storage.dart';
@@ -54,6 +55,7 @@ class MainScreen extends State<MainScreenDisplayer> {
   @override
   void initState() {
     super.initState();
+    FlutterDisplayMode.setHighRefreshRate();
     initShoppingList();
     initUsername();
   }
