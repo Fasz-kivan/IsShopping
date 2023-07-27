@@ -50,5 +50,7 @@ class EmojiDictionaryEng {
     'honey': '🐝',
     'paper towel': '🧻',
     'candle': '🕯️',
+    'lemon': '🍋',
+    'cereal': '🥣',
   };
 }
