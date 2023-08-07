@@ -5,7 +5,7 @@
 
 IsShopping by faszkivan, a lightweight shopping list with a touch of flavor via emoji 🍕😊
 
-## Currently under development in spare time so progress is slow
+Currently under development in our spare time for fun, so progress may be slow and updates intermittent.
 
 ## Screenshot of the app's current state
 
