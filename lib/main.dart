@@ -55,7 +55,15 @@ class MainScreen extends State<MainScreenDisplayer> {
   @override
   void initState() {
     super.initState();
-    FlutterDisplayMode.setHighRefreshRate();
+
+    try {
+      FlutterDisplayMode
+          .setHighRefreshRate(); //NOTE - this throws an exception on non mobile startups
+    } catch (e) {
+      // ignore: avoid_print
+      print(e.toString());
+    }
+
     initShoppingList();
     initUsername();
   }
@@ -529,7 +537,7 @@ class MainScreen extends State<MainScreenDisplayer> {
     if (item.itemName.contains(emojiRegex)) {
       for (var match in emojiRegex.allMatches(item.itemName)) {
         emojiFound = match.group(0).toString();
-      } //TODO - unlock limitation of 1 emoji in a cleaner way
+      }
 
       return ShoppingItem(
           itemName: item.itemName
