@@ -7,6 +7,11 @@ IsShopping by faszkivan, a lightweight shopping list with a touch of flavor via 
 
 Currently under development in our spare time for fun, so progress may be slow and updates intermittent.
 
+## Getting started
+
+`flutter pub get`
+yep, that's all afaik, but feel free to open an issue if it doesn't work
+
 ## Screenshot of the app's current state
 
 ![image](https://github.com/Fasz-kivan/IsShopping/assets/55391231/d3d9639a-7127-4028-affd-9aad3f95a492)
