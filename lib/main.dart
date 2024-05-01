@@ -6,6 +6,7 @@ import 'package:is_shopping/emoji_dictionary_eng.dart';
 import 'package:is_shopping/shopping_item.dart';
 import 'package:is_shopping/item_storage.dart';
 import 'package:is_shopping/user_storage.dart';
+import 'package:dart_emoji/dart_emoji.dart';
 
 final myController = TextEditingController();
 
@@ -554,6 +555,11 @@ class MainScreen extends State<MainScreenDisplayer> {
         emojiFound = value;
       }
     });
+
+    if (emojiFound == '') {
+      var emoji = EmojiParser().info(item.itemName.toLowerCase()).code;
+      emojiFound = emoji;
+    }
 
     return ShoppingItem(
         itemName: item.itemName.replaceAll(RegExp(' {2,}'), ' '),
