@@ -13,6 +13,7 @@ final myController = TextEditingController();
 void main() => runApp(MaterialApp(
       home: const MainScreenDisplayer(),
       theme: ThemeData(
+          useMaterial3: false,
           fontFamily: 'Segoe UI',
           colorScheme: const ColorScheme(
               brightness: Brightness.light,
