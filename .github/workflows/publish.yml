@@ -1,0 +1,37 @@
+name: Publish APK / Web
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'microsoft'
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+      - run: flutter pub get
+      - run: dart format --set-exit-if-changed .
+      - run: flutter analyze .
+      - run: flutter build apk
+      - run: flutter build web --release --web-renderer html --base-href /IsShopping/
+      - name: Commit web build
+        run: |
+          git config --global user.name 'Lovasz-Akos'
+          git config --global user.email 'lovasz.akos.dev@gmail.com'
+          git commit -am "Web release build"
+          git push
+      - uses: actions/upload-artifact@v1
+        with:
+          name: release-apk
+          path: build/app/outputs/apk/release/app-release.apk
