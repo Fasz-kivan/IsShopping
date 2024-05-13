@@ -1,13 +1,14 @@
 # IsShopping
 
 [![Dart and Flutter build](https://github.com/Fasz-kivan/IsShopping/actions/workflows/dart.yml/badge.svg)](https://github.com/Fasz-kivan/IsShopping/actions/workflows/dart.yml)
-[![Release Build](https://github.com/Fasz-kivan/IsShopping/actions/workflows/dart.yml/badge.svg)](https://github.com/Fasz-kivan/IsShopping/actions/workflows/publish.yml)
+
+[![Release Build](https://github.com/Fasz-kivan/IsShopping/actions/workflows/publish.yml/badge.svg)](https://github.com/Fasz-kivan/IsShopping/actions/workflows/publish.yml)
 
 IsShopping by faszkivan, a lightweight shopping list with a touch of flavor via emoji 🍕😊
 
 Currently under development in our spare time for fun, so progress may be slow and updates intermittent.
 
-I publish a web build along with every new APK over at [https://fasz-kivan.github.io/IsShopping-Web/](IsShopping-Web)
+I publish a web build along with every new APK over at [IsShopping-Web](https://fasz-kivan.github.io/IsShopping-Web/)
 
 ## Getting started
 
