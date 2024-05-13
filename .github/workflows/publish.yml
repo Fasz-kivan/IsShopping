@@ -24,7 +24,7 @@ jobs:
       - run: dart format --set-exit-if-changed .
       - run: flutter analyze .
       - run: flutter build apk
-      - run: flutter build web --release --web-renderer html --base-href /IsShopping/
+      - run: flutter build web --release --web-renderer html --base-href /IsShopping/build/web/
       - name: Commit web build
         run: |
           git config --global user.name 'Lovasz-Akos'
