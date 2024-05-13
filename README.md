@@ -7,6 +7,8 @@ IsShopping by faszkivan, a lightweight shopping list with a touch of flavor via 
 
 Currently under development in our spare time for fun, so progress may be slow and updates intermittent.
 
+I publish a web build along with every new APK over at [https://fasz-kivan.github.io/IsShopping-Web/](IsShopping-Web)
+
 ## Getting started
 
 `flutter pub get`
