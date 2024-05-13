@@ -1,12 +1,9 @@
-name: Publish APK / Web
+name: Publish APK
 
 on:
   push:
     branches:
       - main
-
-permissions:
-  contents: write
 
 jobs:
   build:
@@ -24,13 +21,6 @@ jobs:
       - run: dart format --set-exit-if-changed .
       - run: flutter analyze .
       - run: flutter build apk
-      - run: flutter build web --release --web-renderer html --base-href /IsShopping/build/web/
-      - name: Commit web build
-        run: |
-          git config --global user.name 'Lovasz-Akos'
-          git config --global user.email 'lovasz.akos.dev@gmail.com'
-          git commit -am "Web release build"
-          git push
       - uses: actions/upload-artifact@v1
         with:
           name: release-apk
