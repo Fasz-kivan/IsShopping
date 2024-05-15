@@ -1,12 +1,15 @@
+import 'dart:io';
+
+import 'package:dart_emoji/dart_emoji.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
+import 'package:intl/intl.dart';
 import 'package:is_shopping/emoji_dictionary_eng.dart';
-import 'package:is_shopping/shopping_item.dart';
 import 'package:is_shopping/item_storage.dart';
+import 'package:is_shopping/shopping_item.dart';
 import 'package:is_shopping/user_storage.dart';
-import 'package:dart_emoji/dart_emoji.dart';
 
 final myController = TextEditingController();
 
@@ -58,16 +61,14 @@ class MainScreen extends State<MainScreenDisplayer> {
   void initState() {
     super.initState();
 
-    try {
-      FlutterDisplayMode
-          .setHighRefreshRate(); //NOTE - this throws an exception on non mobile startups
-    } catch (e) {
-      // ignore: avoid_print
-      print(e.toString());
-    }
-
     initShoppingList();
     initUsername();
+
+    if (!kIsWeb) {
+      if (Platform.isAndroid) {
+        FlutterDisplayMode.setHighRefreshRate();
+      }
+    }
   }
 
   Widget shoppingItemTemplate(BuildContext context, ShoppingItem shoppingItem) {
@@ -384,10 +385,8 @@ class MainScreen extends State<MainScreenDisplayer> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          ...shoppingList
-                              .map((shoppingItem) =>
-                                  shoppingItemTemplate(context, shoppingItem))
-                              .toList(),
+                          ...shoppingList.map((shoppingItem) =>
+                              shoppingItemTemplate(context, shoppingItem)),
                         ],
                       ),
                     ),
