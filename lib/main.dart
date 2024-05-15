@@ -1,12 +1,15 @@
+import 'dart:io';
+
+import 'package:dart_emoji/dart_emoji.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
+import 'package:intl/intl.dart';
 import 'package:is_shopping/emoji_dictionary_eng.dart';
-import 'package:is_shopping/shopping_item.dart';
 import 'package:is_shopping/item_storage.dart';
+import 'package:is_shopping/shopping_item.dart';
 import 'package:is_shopping/user_storage.dart';
-import 'package:dart_emoji/dart_emoji.dart';
 
 final myController = TextEditingController();
 
@@ -58,16 +61,14 @@ class MainScreen extends State<MainScreenDisplayer> {
   void initState() {
     super.initState();
 
-    try {
-      FlutterDisplayMode
-          .setHighRefreshRate(); //NOTE - this throws an exception on non mobile startups
-    } catch (e) {
-      // ignore: avoid_print
-      print(e.toString());
-    }
-
     initShoppingList();
     initUsername();
+
+    if (!kIsWeb) {
+      if (Platform.isAndroid) {
+        FlutterDisplayMode.setHighRefreshRate();
+      }
+    }
   }
 
   Widget shoppingItemTemplate(BuildContext context, ShoppingItem shoppingItem) {
@@ -93,9 +94,7 @@ class MainScreen extends State<MainScreenDisplayer> {
               padding: const EdgeInsets.all(10),
               margin: const EdgeInsets.fromLTRB(10, 15 / 2, 10, 15 / 2),
               decoration: ShapeDecoration(
-                color: shoppingItem.isChecked
-                    ? Theme.of(context).colorScheme.onBackground
-                    : Colors.white,
+                color: shoppingItem.isChecked ? Theme.of(context).colorScheme.onBackground : Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -136,14 +135,10 @@ class MainScreen extends State<MainScreenDisplayer> {
                             shoppingItem.itemName,
                             style: TextStyle(
                               color: const Color(0xFF1E1E1E),
-                              decoration: shoppingItem.isChecked
-                                  ? TextDecoration.lineThrough
-                                  : TextDecoration.none,
+                              decoration: shoppingItem.isChecked ? TextDecoration.lineThrough : TextDecoration.none,
                               fontFamily: "Manrope",
                               fontSize: 15,
-                              fontWeight: shoppingItem.isChecked
-                                  ? FontWeight.w200
-                                  : FontWeight.w700,
+                              fontWeight: shoppingItem.isChecked ? FontWeight.w200 : FontWeight.w700,
                             ),
                           ),
                           Container(
@@ -153,32 +148,22 @@ class MainScreen extends State<MainScreenDisplayer> {
                               style: TextStyle(
                                 color: const Color(0xFF808080),
                                 fontSize: 12,
-                                decoration: shoppingItem.isChecked
-                                    ? TextDecoration.lineThrough
-                                    : TextDecoration.none,
+                                decoration: shoppingItem.isChecked ? TextDecoration.lineThrough : TextDecoration.none,
                                 fontFamily: 'Manrope',
-                                fontWeight: shoppingItem.isChecked
-                                    ? FontWeight.w200
-                                    : FontWeight.w700,
+                                fontWeight: shoppingItem.isChecked ? FontWeight.w200 : FontWeight.w700,
                               ),
                             ),
                           ),
                           Container(
                             padding: const EdgeInsets.only(top: 3),
                             child: Text(
-                              shoppingItem.quantity == null
-                                  ? ''
-                                  : '${shoppingItem.quantity}',
+                              shoppingItem.quantity == null ? '' : '${shoppingItem.quantity}',
                               style: TextStyle(
                                 color: const Color(0xFF808080),
                                 fontSize: 12,
-                                decoration: shoppingItem.isChecked
-                                    ? TextDecoration.lineThrough
-                                    : TextDecoration.none,
+                                decoration: shoppingItem.isChecked ? TextDecoration.lineThrough : TextDecoration.none,
                                 fontFamily: 'Manrope',
-                                fontWeight: shoppingItem.isChecked
-                                    ? FontWeight.w200
-                                    : FontWeight.w700,
+                                fontWeight: shoppingItem.isChecked ? FontWeight.w200 : FontWeight.w700,
                               ),
                             ),
                           ),
@@ -190,20 +175,15 @@ class MainScreen extends State<MainScreenDisplayer> {
                     scale: 1.3,
                     child: Checkbox(
                         shape: RoundedRectangleBorder(
-                          side: const BorderSide(
-                              width: 0.50, color: Color(0xFF1E1E1E)),
+                          side: const BorderSide(width: 0.50, color: Color(0xFF1E1E1E)),
                           borderRadius: BorderRadius.circular(90),
                         ),
                         side: MaterialStateBorderSide.resolveWith(
                           (Set<MaterialState> states) {
                             if (states.contains(MaterialState.selected)) {
-                              return BorderSide(
-                                  width: 1,
-                                  color:
-                                      Theme.of(context).colorScheme.secondary);
+                              return BorderSide(width: 1, color: Theme.of(context).colorScheme.secondary);
                             }
-                            return const BorderSide(
-                                width: 1, color: Colors.black);
+                            return const BorderSide(width: 1, color: Colors.black);
                           },
                         ),
                         value: shoppingItem.isChecked,
@@ -232,10 +212,7 @@ class MainScreen extends State<MainScreenDisplayer> {
       return 'Good Evening, ';
     }
 
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        systemNavigationBarColor: Colors.white,
-        systemNavigationBarIconBrightness: Brightness.light,
-        statusBarColor: Colors.transparent));
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(systemNavigationBarColor: Colors.white, systemNavigationBarIconBrightness: Brightness.light, statusBarColor: Colors.transparent));
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
@@ -251,8 +228,7 @@ class MainScreen extends State<MainScreenDisplayer> {
                 icon: const Icon(Icons.checklist),
                 onPressed: () => setState(() {
                   bool flipValue;
-                  if (shoppingList
-                      .every((element) => element.isChecked == true)) {
+                  if (shoppingList.every((element) => element.isChecked == true)) {
                     flipValue = false;
                   } else {
                     flipValue = true;
@@ -271,8 +247,7 @@ class MainScreen extends State<MainScreenDisplayer> {
               child: IconButton(
                 icon: const Icon(Icons.delete_forever),
                 onPressed: () => setState(() {
-                  shoppingList
-                      .removeWhere((element) => element.isChecked == true);
+                  shoppingList.removeWhere((element) => element.isChecked == true);
                   storeShoppingItems(shoppingList);
                 }),
                 iconSize: 24,
@@ -346,8 +321,7 @@ class MainScreen extends State<MainScreenDisplayer> {
                     ),
                     child: SingleChildScrollView(
                       physics: const BouncingScrollPhysics(),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 10),
+                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                       child: Column(
                         children: [
                           Padding(
@@ -371,9 +345,7 @@ class MainScreen extends State<MainScreenDisplayer> {
                             child: Container(
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                shoppingList.isEmpty
-                                    ? 'Time to add some items! 🛒'
-                                    : 'Tap and hold and item in the list to edit or delete it',
+                                shoppingList.isEmpty ? 'Time to add some items! 🛒' : 'Tap and hold and item in the list to edit or delete it',
                                 style: const TextStyle(
                                   color: Color(0xFFBFBFBF),
                                   fontSize: 12,
@@ -384,10 +356,7 @@ class MainScreen extends State<MainScreenDisplayer> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          ...shoppingList
-                              .map((shoppingItem) =>
-                                  shoppingItemTemplate(context, shoppingItem))
-                              .toList(),
+                          ...shoppingList.map((shoppingItem) => shoppingItemTemplate(context, shoppingItem)),
                         ],
                       ),
                     ),
@@ -456,18 +425,11 @@ class MainScreen extends State<MainScreenDisplayer> {
                 children: [
                   ElevatedButton(
                     style: ButtonStyle(
-                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10))),
-                        backgroundColor: MaterialStatePropertyAll(
-                            Theme.of(context).colorScheme.secondary),
-                        foregroundColor:
-                            const MaterialStatePropertyAll(Colors.white),
-                        textStyle: const MaterialStatePropertyAll(TextStyle(
-                            fontFamily: "Manrope",
-                            fontWeight: FontWeight.w900,
-                            fontSize: 15)),
-                        minimumSize:
-                            const MaterialStatePropertyAll(Size(110, 50))),
+                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                        backgroundColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.secondary),
+                        foregroundColor: const MaterialStatePropertyAll(Colors.white),
+                        textStyle: const MaterialStatePropertyAll(TextStyle(fontFamily: "Manrope", fontWeight: FontWeight.w900, fontSize: 15)),
+                        minimumSize: const MaterialStatePropertyAll(Size(110, 50))),
                     onPressed: () {
                       itemcontroller.text = '';
                       qtycontroller.text = '';
@@ -475,22 +437,14 @@ class MainScreen extends State<MainScreenDisplayer> {
                     },
                     child: const Text("Cancel"),
                   ),
-                  SizedBox(
-                      width: MediaQuery.of(context).size.width < 350 ? 5 : 20),
+                  SizedBox(width: MediaQuery.of(context).size.width < 350 ? 5 : 20),
                   ElevatedButton(
                     style: ButtonStyle(
-                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10))),
-                        backgroundColor: MaterialStatePropertyAll(
-                            Theme.of(context).colorScheme.primary),
-                        foregroundColor:
-                            const MaterialStatePropertyAll(Colors.white),
-                        textStyle: const MaterialStatePropertyAll(TextStyle(
-                            fontFamily: "Manrope",
-                            fontWeight: FontWeight.w900,
-                            fontSize: 15)),
-                        minimumSize:
-                            const MaterialStatePropertyAll(Size(110, 50))),
+                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                        backgroundColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.primary),
+                        foregroundColor: const MaterialStatePropertyAll(Colors.white),
+                        textStyle: const MaterialStatePropertyAll(TextStyle(fontFamily: "Manrope", fontWeight: FontWeight.w900, fontSize: 15)),
+                        minimumSize: const MaterialStatePropertyAll(Size(110, 50))),
                     onPressed: () {
                       setState(() {
                         if (itemcontroller.text.isNotEmpty) {
@@ -541,14 +495,7 @@ class MainScreen extends State<MainScreenDisplayer> {
         emojiFound = match.group(0).toString();
       }
 
-      return ShoppingItem(
-          itemName: item.itemName
-              .replaceAll(emojiRegex, '')
-              .trim()
-              .replaceAll(RegExp(' {2,}'), ' '),
-          emoji: emojiFound,
-          addedAt: item.addedAt,
-          quantity: item.quantity);
+      return ShoppingItem(itemName: item.itemName.replaceAll(emojiRegex, '').trim().replaceAll(RegExp(' {2,}'), ' '), emoji: emojiFound, addedAt: item.addedAt, quantity: item.quantity);
     }
 
     EmojiDictionaryEng().dictionary.forEach((key, value) {
@@ -562,11 +509,7 @@ class MainScreen extends State<MainScreenDisplayer> {
       emojiFound = emoji;
     }
 
-    return ShoppingItem(
-        itemName: item.itemName.replaceAll(RegExp(' {2,}'), ' '),
-        emoji: emojiFound == '' ? '🛒' : emojiFound,
-        addedAt: item.addedAt,
-        quantity: item.quantity);
+    return ShoppingItem(itemName: item.itemName.replaceAll(RegExp(' {2,}'), ' '), emoji: emojiFound == '' ? '🛒' : emojiFound, addedAt: item.addedAt, quantity: item.quantity);
   }
 
   void setItemToChecked(ShoppingItem item) {
@@ -592,8 +535,7 @@ class MainScreen extends State<MainScreenDisplayer> {
 
   void _showContextMenu(BuildContext context, ShoppingItem shoppingItem) async {
     final selectedOption = await showMenu(
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(15.0))),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15.0))),
       context: context,
       position: RelativeRect.fromLTRB(
         _longPressPosition.dx,
@@ -615,8 +557,7 @@ class MainScreen extends State<MainScreenDisplayer> {
 
     if (selectedOption == 'edit') {
       updateitemcontroller.text = shoppingItem.itemName;
-      updateqtycontroller.text =
-          shoppingItem.quantity == null ? '' : shoppingItem.quantity.toString();
+      updateqtycontroller.text = shoppingItem.quantity == null ? '' : shoppingItem.quantity.toString();
       updateItemDialog(shoppingItem);
     } else if (selectedOption == 'delete') {
       setState(() {
@@ -690,18 +631,11 @@ class MainScreen extends State<MainScreenDisplayer> {
                 children: [
                   ElevatedButton(
                     style: ButtonStyle(
-                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10))),
-                        backgroundColor: MaterialStatePropertyAll(
-                            Theme.of(context).colorScheme.secondary),
-                        foregroundColor:
-                            const MaterialStatePropertyAll(Colors.white),
-                        textStyle: const MaterialStatePropertyAll(TextStyle(
-                            fontFamily: "Manrope",
-                            fontWeight: FontWeight.w900,
-                            fontSize: 15)),
-                        minimumSize:
-                            const MaterialStatePropertyAll(Size(110, 50))),
+                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                        backgroundColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.secondary),
+                        foregroundColor: const MaterialStatePropertyAll(Colors.white),
+                        textStyle: const MaterialStatePropertyAll(TextStyle(fontFamily: "Manrope", fontWeight: FontWeight.w900, fontSize: 15)),
+                        minimumSize: const MaterialStatePropertyAll(Size(110, 50))),
                     onPressed: () {
                       itemcontroller.text = '';
                       qtycontroller.text = '';
@@ -711,34 +645,19 @@ class MainScreen extends State<MainScreenDisplayer> {
                   ),
                   ElevatedButton(
                     style: ButtonStyle(
-                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10))),
-                        backgroundColor: MaterialStatePropertyAll(
-                            Theme.of(context).colorScheme.primary),
-                        foregroundColor:
-                            const MaterialStatePropertyAll(Colors.white),
-                        textStyle: const MaterialStatePropertyAll(TextStyle(
-                            fontFamily: "Manrope",
-                            fontWeight: FontWeight.w900,
-                            fontSize: 15)),
-                        minimumSize:
-                            const MaterialStatePropertyAll(Size(110, 50))),
+                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                        backgroundColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.primary),
+                        foregroundColor: const MaterialStatePropertyAll(Colors.white),
+                        textStyle: const MaterialStatePropertyAll(TextStyle(fontFamily: "Manrope", fontWeight: FontWeight.w900, fontSize: 15)),
+                        minimumSize: const MaterialStatePropertyAll(Size(110, 50))),
                     onPressed: () {
                       setState(() {
                         if (updateitemcontroller.text.isNotEmpty) {
-                          ShoppingItem updatedItem = checkItemForEmoji(
-                              ShoppingItem(
-                                  itemName: updateitemcontroller.text,
-                                  emoji: '',
-                                  addedAt: shoppingItem.addedAt,
-                                  quantity: shoppingItem.quantity));
+                          ShoppingItem updatedItem = checkItemForEmoji(ShoppingItem(itemName: updateitemcontroller.text, emoji: '', addedAt: shoppingItem.addedAt, quantity: shoppingItem.quantity));
 
                           shoppingItem.itemName = updatedItem.itemName;
 
-                          shoppingItem.quantity =
-                              updateitemcontroller.text.isEmpty
-                                  ? null
-                                  : updateqtycontroller.text;
+                          shoppingItem.quantity = updateitemcontroller.text.isEmpty ? null : updateqtycontroller.text;
 
                           shoppingItem.emoji = updatedItem.emoji;
                           Navigator.of(context).pop();
@@ -802,18 +721,11 @@ class MainScreen extends State<MainScreenDisplayer> {
                 children: [
                   ElevatedButton(
                     style: ButtonStyle(
-                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10))),
-                        backgroundColor: MaterialStatePropertyAll(
-                            Theme.of(context).colorScheme.secondary),
-                        foregroundColor:
-                            const MaterialStatePropertyAll(Colors.white),
-                        textStyle: const MaterialStatePropertyAll(TextStyle(
-                            fontFamily: "Manrope",
-                            fontWeight: FontWeight.w900,
-                            fontSize: 15)),
-                        minimumSize:
-                            const MaterialStatePropertyAll(Size(110, 50))),
+                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                        backgroundColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.secondary),
+                        foregroundColor: const MaterialStatePropertyAll(Colors.white),
+                        textStyle: const MaterialStatePropertyAll(TextStyle(fontFamily: "Manrope", fontWeight: FontWeight.w900, fontSize: 15)),
+                        minimumSize: const MaterialStatePropertyAll(Size(110, 50))),
                     onPressed: () {
                       usernamecontroller.text = '';
                       Navigator.of(context).pop();
@@ -822,18 +734,11 @@ class MainScreen extends State<MainScreenDisplayer> {
                   ),
                   ElevatedButton(
                     style: ButtonStyle(
-                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10))),
-                        backgroundColor: MaterialStatePropertyAll(
-                            Theme.of(context).colorScheme.primary),
-                        foregroundColor:
-                            const MaterialStatePropertyAll(Colors.white),
-                        textStyle: const MaterialStatePropertyAll(TextStyle(
-                            fontFamily: "Manrope",
-                            fontWeight: FontWeight.w900,
-                            fontSize: 15)),
-                        minimumSize:
-                            const MaterialStatePropertyAll(Size(110, 50))),
+                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                        backgroundColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.primary),
+                        foregroundColor: const MaterialStatePropertyAll(Colors.white),
+                        textStyle: const MaterialStatePropertyAll(TextStyle(fontFamily: "Manrope", fontWeight: FontWeight.w900, fontSize: 15)),
+                        minimumSize: const MaterialStatePropertyAll(Size(110, 50))),
                     onPressed: () {
                       setState(() {
                         if (usernamecontroller.text.isNotEmpty) {
