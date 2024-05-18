@@ -9,27 +9,16 @@ import 'package:intl/intl.dart';
 import 'package:is_shopping/emoji_dictionary_eng.dart';
 import 'package:is_shopping/item_storage.dart';
 import 'package:is_shopping/shopping_item.dart';
+import 'package:is_shopping/themes.dart';
 import 'package:is_shopping/user_storage.dart';
 
 final myController = TextEditingController();
 
 void main() => runApp(MaterialApp(
       home: const MainScreenDisplayer(),
-      theme: ThemeData(
-          useMaterial3: false,
-          fontFamily: 'Segoe UI',
-          colorScheme: const ColorScheme(
-              brightness: Brightness.light,
-              primary: Color(0xff5fd068),
-              onPrimary: Color(0xff4B8673),
-              secondary: Color(0xffFD5D6A),
-              onSecondary: Color(0xff7F8FF5),
-              error: Color.fromARGB(255, 255, 0, 0),
-              onError: Color.fromARGB(255, 255, 116, 116),
-              background: Color(0xffF6FBF4),
-              onBackground: Color(0xffF3F3F3),
-              surface: Color(0xFFF5DF99),
-              onSurface: Color(0xFF404040))),
+      theme: Themes.lightTheme,
+      darkTheme: Themes.darkTheme,
+      themeMode: ThemeMode.system,
     ));
 
 class MainScreenDisplayer extends StatefulWidget {
@@ -96,7 +85,7 @@ class MainScreen extends State<MainScreenDisplayer> {
               decoration: ShapeDecoration(
                 color: shoppingItem.isChecked
                     ? Theme.of(context).colorScheme.onBackground
-                    : Colors.white,
+                    : Theme.of(context).colorScheme.tertiary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -136,7 +125,7 @@ class MainScreen extends State<MainScreenDisplayer> {
                           Text(
                             shoppingItem.itemName,
                             style: TextStyle(
-                              color: const Color(0xFF1E1E1E),
+                              color: Theme.of(context).colorScheme.onPrimary,
                               decoration: shoppingItem.isChecked
                                   ? TextDecoration.lineThrough
                                   : TextDecoration.none,
@@ -152,7 +141,8 @@ class MainScreen extends State<MainScreenDisplayer> {
                             child: Text(
                               "Added: $formattedDate",
                               style: TextStyle(
-                                color: const Color(0xFF808080),
+                                color:
+                                    Theme.of(context).colorScheme.onSecondary,
                                 fontSize: 12,
                                 decoration: shoppingItem.isChecked
                                     ? TextDecoration.lineThrough
@@ -171,7 +161,8 @@ class MainScreen extends State<MainScreenDisplayer> {
                                   ? ''
                                   : '${shoppingItem.quantity}',
                               style: TextStyle(
-                                color: const Color(0xFF808080),
+                                color:
+                                    Theme.of(context).colorScheme.onSecondary,
                                 fontSize: 12,
                                 decoration: shoppingItem.isChecked
                                     ? TextDecoration.lineThrough
@@ -233,9 +224,12 @@ class MainScreen extends State<MainScreenDisplayer> {
       return 'Good Evening, ';
     }
 
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        systemNavigationBarColor: Colors.white,
-        systemNavigationBarIconBrightness: Brightness.light,
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        systemNavigationBarColor: Theme.of(context).colorScheme.surface,
+        systemNavigationBarIconBrightness:
+            Theme.of(context).brightness == Brightness.dark
+                ? Brightness.light
+                : Brightness.dark,
         statusBarColor: Colors.transparent));
 
     return Scaffold(
@@ -355,10 +349,11 @@ class MainScreen extends State<MainScreenDisplayer> {
                             padding: const EdgeInsets.only(left: 15, top: 20),
                             child: Container(
                               alignment: Alignment.centerLeft,
-                              child: const Text(
+                              child: Text(
                                 'Shopping List',
                                 style: TextStyle(
-                                  color: Color(0xFF1E1E1E),
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
                                   fontSize: 23,
                                   fontFamily: 'Manrope',
                                   fontWeight: FontWeight.w900,
@@ -535,6 +530,10 @@ class MainScreen extends State<MainScreenDisplayer> {
   ShoppingItem checkItemForEmoji(ShoppingItem item) {
     var emojiFound = '';
 
+    if (item.emoji != '🛒' || item.emoji == '') {
+      emojiFound = item.emoji;
+    }
+
     if (item.itemName.contains(emojiRegex)) {
       for (var match in emojiRegex.allMatches(item.itemName)) {
         emojiFound = match.group(0).toString();
@@ -627,7 +626,6 @@ class MainScreen extends State<MainScreenDisplayer> {
         const SnackBar(
           content: Text(
             "Item Deleted 💥",
-            style: TextStyle(fontFamily: "Manrope"),
           ),
         ),
       );
@@ -728,7 +726,7 @@ class MainScreen extends State<MainScreenDisplayer> {
                           ShoppingItem updatedItem = checkItemForEmoji(
                               ShoppingItem(
                                   itemName: updateitemcontroller.text,
-                                  emoji: '',
+                                  emoji: shoppingItem.emoji,
                                   addedAt: shoppingItem.addedAt,
                                   quantity: shoppingItem.quantity));
 
