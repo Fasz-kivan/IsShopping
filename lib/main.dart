@@ -527,6 +527,10 @@ class MainScreen extends State<MainScreenDisplayer> {
   ShoppingItem checkItemForEmoji(ShoppingItem item) {
     var emojiFound = '';
 
+    if (item.emoji != '🛒' || item.emoji == '') {
+      emojiFound = item.emoji;
+    }
+
     if (item.itemName.contains(emojiRegex)) {
       for (var match in emojiRegex.allMatches(item.itemName)) {
         emojiFound = match.group(0).toString();
@@ -619,7 +623,6 @@ class MainScreen extends State<MainScreenDisplayer> {
         const SnackBar(
           content: Text(
             "Item Deleted 💥",
-            style: TextStyle(fontFamily: "Manrope"),
           ),
         ),
       );
@@ -720,7 +723,7 @@ class MainScreen extends State<MainScreenDisplayer> {
                           ShoppingItem updatedItem = checkItemForEmoji(
                               ShoppingItem(
                                   itemName: updateitemcontroller.text,
-                                  emoji: '',
+                                  emoji: shoppingItem.emoji,
                                   addedAt: shoppingItem.addedAt,
                                   quantity: shoppingItem.quantity));
 
