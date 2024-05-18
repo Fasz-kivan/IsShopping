@@ -226,7 +226,10 @@ class MainScreen extends State<MainScreenDisplayer> {
 
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         systemNavigationBarColor: Theme.of(context).colorScheme.surface,
-        systemNavigationBarIconBrightness: Brightness.dark,
+        systemNavigationBarIconBrightness:
+            Theme.of(context).brightness == Brightness.dark
+                ? Brightness.light
+                : Brightness.dark,
         statusBarColor: Colors.transparent));
 
     return Scaffold(
