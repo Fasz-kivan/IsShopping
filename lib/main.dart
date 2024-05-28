@@ -437,7 +437,6 @@ class MainScreen extends State<MainScreenDisplayer> {
                 child: TextFormField(
                   autofocus: true,
                   textInputAction: TextInputAction.done,
-                  keyboardType: const TextInputType.numberWithOptions(),
                   decoration: InputDecoration(
                       hintText: "Quantiy 💯",
                       border: OutlineInputBorder(
@@ -677,7 +676,6 @@ class MainScreen extends State<MainScreenDisplayer> {
                 child: TextFormField(
                   autofocus: true,
                   textInputAction: TextInputAction.done,
-                  keyboardType: const TextInputType.numberWithOptions(),
                   decoration: InputDecoration(
                       hintText: "Quantiy 💯",
                       border: OutlineInputBorder(
