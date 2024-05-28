@@ -418,6 +418,7 @@ class MainScreen extends State<MainScreenDisplayer> {
                 padding: const EdgeInsets.only(left: 5, right: 5),
                 child: TextFormField(
                   autofocus: true,
+                  textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
                       fillColor: Theme.of(context).colorScheme.onSurface,
                       hintText: "Item name 🛒",
@@ -435,6 +436,8 @@ class MainScreen extends State<MainScreenDisplayer> {
                 padding: const EdgeInsets.only(left: 5, right: 5),
                 child: TextFormField(
                   autofocus: true,
+                  textInputAction: TextInputAction.done,
+                  keyboardType: const TextInputType.numberWithOptions(),
                   decoration: InputDecoration(
                       hintText: "Quantiy 💯",
                       border: OutlineInputBorder(
@@ -657,6 +660,7 @@ class MainScreen extends State<MainScreenDisplayer> {
                 padding: const EdgeInsets.only(left: 5, right: 5),
                 child: TextFormField(
                   autofocus: true,
+                  textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
                       fillColor: Theme.of(context).colorScheme.onSurface,
                       hintText: "Item name 🛒",
@@ -672,6 +676,8 @@ class MainScreen extends State<MainScreenDisplayer> {
                 padding: const EdgeInsets.only(left: 5, right: 5),
                 child: TextFormField(
                   autofocus: true,
+                  textInputAction: TextInputAction.done,
+                  keyboardType: const TextInputType.numberWithOptions(),
                   decoration: InputDecoration(
                       hintText: "Quantiy 💯",
                       border: OutlineInputBorder(
