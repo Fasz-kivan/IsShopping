@@ -1,4 +1,4 @@
-package com.example.is_shopping
+package com.faszkivan.is_shopping
 
 import io.flutter.embedding.android.FlutterActivity
 
