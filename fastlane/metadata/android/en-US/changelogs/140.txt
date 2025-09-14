@@ -1,0 +1,5 @@
+Check input type for quantity and add action for inputs
+
+Upgrade flutter, upgrade dependencies, fix gradle cry
+
+Do not require the phone to be unlocked to use the app

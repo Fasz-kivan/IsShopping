@@ -1,0 +1,1 @@
+Scrolling and animations will not run much smoother if you own a high refresh rate screen phone
