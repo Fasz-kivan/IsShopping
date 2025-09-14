@@ -1,0 +1,1 @@
+Added a new parser that tries to extract an emoji from text that was not present in the static dictionary or didn't include a custom one. This tires to match the input with an exact emoji's name so it's not the best solution, it won't cover too many things but it's something :D

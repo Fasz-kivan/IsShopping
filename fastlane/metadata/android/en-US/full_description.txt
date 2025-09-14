@@ -1,0 +1,5 @@
+A shopping list app with highly minimal design while looking nice and a splash of personality via emoji.
+
+The App will try to autofill the emoji based on the item's name, but you can set a custom one by including it in the item's name!
+
+Also supports being used from the lockscreen without unlocking your phone!
