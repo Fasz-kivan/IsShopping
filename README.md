@@ -17,7 +17,7 @@ yep, that's all afaik, but feel free to open an issue if it doesn't work
 
 ### To build the web version, use
 
-`flutter build web --release --web-renderer canvaskit --base-href /IsShopping-Web/`
+`flutter build web --release --base-href /IsShopping-Web/`
 
 ## Screenshot of the app's current state
 
