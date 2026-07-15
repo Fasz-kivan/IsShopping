@@ -130,7 +130,7 @@ class MainScreen extends State<MainScreenDisplayer> {
                           i,
                           (context, animation) => shoppingItemTemplate(
                               context, removedItem, animation),
-                          duration: const Duration(milliseconds: 200),
+                          duration: const Duration(milliseconds: 100),
                         );
                       }
                     }
@@ -302,7 +302,7 @@ class MainScreen extends State<MainScreenDisplayer> {
     });
     _listKey.currentState?.insertItem(
       shoppingList.length - 1,
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 100),
     );
     storeShoppingItems(shoppingList);
   }
@@ -388,7 +388,7 @@ class MainScreen extends State<MainScreenDisplayer> {
           index,
           (context, animation) =>
               shoppingItemTemplate(context, shoppingItem, animation),
-          duration: const Duration(milliseconds: 200),
+          duration: const Duration(milliseconds: 100),
         );
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(

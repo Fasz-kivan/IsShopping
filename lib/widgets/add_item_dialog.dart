@@ -46,71 +46,74 @@ class _AddItemDialogState extends State<AddItemDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      insetPadding: const EdgeInsets.symmetric(horizontal: 20),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30),
-      ),
-      title: Padding(
-        padding: const EdgeInsets.only(left: 5, top: 5),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text("✅ Add new item",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                )),
-            GestureDetector(
-              onTap: () {
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(25)),
+    final screenWidth = MediaQuery.of(context).size.width;
+    final dialogWidth = screenWidth < 350 ? screenWidth - 40 : 310.0;
+
+    return SizedBox(
+      width: dialogWidth,
+      child: AlertDialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 20),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+        title: Padding(
+          padding: const EdgeInsets.only(left: 5, top: 5),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text("✅ Add new item",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                  )),
+              GestureDetector(
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(25)),
+                    ),
+                    builder: (context) => EmojiPickerSheet(
+                      onEmojiSelected: (emoji) {
+                        setState(() {
+                          selectedEmoji = emoji;
+                          isManuallySelected = true;
+                        });
+                      },
+                    ),
+                  );
+                },
+                child: Container(
+                  height: 50,
+                  width: 50,
+                  decoration: ShapeDecoration(
+                    color: Theme.of(context).colorScheme.onBackground,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
-                  builder: (context) => EmojiPickerSheet(
-                    onEmojiSelected: (emoji) {
-                      setState(() {
-                        selectedEmoji = emoji;
-                        isManuallySelected = true;
-                      });
-                    },
-                  ),
-                );
-              },
-              child: Container(
-                height: 50,
-                width: 50,
-                decoration: ShapeDecoration(
-                  color: Theme.of(context).colorScheme.onBackground,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Transform.translate(
-                  offset: const Offset(0, 2),
-                  child: Center(
-                    child: Text(
-                      selectedEmoji,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 32,
-                        fontFamily: 'Segoe UI',
-                        fontWeight: FontWeight.w400,
+                  child: Transform.translate(
+                    offset: const Offset(0, 2),
+                    child: Center(
+                      child: Text(
+                        selectedEmoji,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 32,
+                          fontFamily: 'Segoe UI',
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-      content: SizedBox(
-        width: 340,
-        child: Column(
+        content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
