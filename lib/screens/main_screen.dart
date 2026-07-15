@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
+import 'package:is_shopping/database/emoji_database.dart';
 import 'package:is_shopping/item_storage.dart';
 import 'package:is_shopping/shopping_item.dart';
 import 'package:is_shopping/user_storage.dart';
@@ -275,11 +276,11 @@ class MainScreen extends State<MainScreenDisplayer> {
     showAnimatedDialog(
       context,
       AddItemDialog(
-        onAdd: (itemName, quantity) {
+        onAdd: (itemName, quantity, emoji) {
           addItemToList(
             ShoppingItem(
               itemName: itemName,
-              emoji: '',
+              emoji: emoji,
               addedAt: DateTime.now(),
               quantity: quantity,
             ),
@@ -309,6 +310,7 @@ class MainScreen extends State<MainScreenDisplayer> {
   }
 
   Future<void> initShoppingList() async {
+    await EmojiDatabase.init();
     List<ShoppingItem> retrievedItems = await retrieveShoppingItems();
     setState(() {
       shoppingList = retrievedItems;
@@ -354,12 +356,13 @@ class MainScreen extends State<MainScreenDisplayer> {
         EditItemDialog(
           initialName: shoppingItem.itemName,
           initialQuantity: shoppingItem.quantity,
-          onSave: (newName, newQuantity) {
+          initialEmoji: shoppingItem.emoji,
+          onSave: (newName, newQuantity, newEmoji) {
             setState(() {
               ShoppingItem updatedItem = checkItemForEmoji(
                   ShoppingItem(
                       itemName: newName,
-                      emoji: shoppingItem.emoji,
+                      emoji: newEmoji,
                       addedAt: shoppingItem.addedAt,
                       quantity: shoppingItem.quantity));
 
