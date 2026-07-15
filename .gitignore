@@ -137,3 +137,7 @@ app.*.symbols
 !/dev/ci/**/Gemfile.lock
 !.vscode/settings.json
 .idea/workspace.xml
+
+# Fastlane secrets
+**/fastlane/*.json
+**/fastlane/*.p8

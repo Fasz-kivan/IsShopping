@@ -1,1 +1,0 @@
-Quantities can now be any text you desire

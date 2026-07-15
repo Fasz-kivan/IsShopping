@@ -1,0 +1,2 @@
+json_key_file("fastlane/api-key.json") # Path to the Google Play Console service account key file
+package_name("com.lovaszakos.is_shopping") # Application Package Name
