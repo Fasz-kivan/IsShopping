@@ -148,7 +148,8 @@ class EmojiDatabase {
     if (serialized != null) {
       try {
         final decoded = jsonDecode(serialized) as Map<String, dynamic>;
-        _customPairings = decoded.map((key, value) => MapEntry(key, value.toString()));
+        _customPairings =
+            decoded.map((key, value) => MapEntry(key, value.toString()));
       } catch (_) {
         _customPairings = {};
       }

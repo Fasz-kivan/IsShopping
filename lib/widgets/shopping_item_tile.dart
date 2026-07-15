@@ -99,7 +99,8 @@ class ShoppingItemTile extends StatelessWidget {
                               child: Text(
                                 "Added: $formattedDate",
                                 style: TextStyle(
-                                  color: Theme.of(context).colorScheme.onSecondary,
+                                  color:
+                                      Theme.of(context).colorScheme.onSecondary,
                                   fontSize: 12,
                                   decoration: shoppingItem.isChecked
                                       ? TextDecoration.lineThrough
@@ -118,7 +119,8 @@ class ShoppingItemTile extends StatelessWidget {
                                     ? ''
                                     : '${shoppingItem.quantity}',
                                 style: TextStyle(
-                                  color: Theme.of(context).colorScheme.onSecondary,
+                                  color:
+                                      Theme.of(context).colorScheme.onSecondary,
                                   fontSize: 12,
                                   decoration: shoppingItem.isChecked
                                       ? TextDecoration.lineThrough
@@ -147,7 +149,8 @@ class ShoppingItemTile extends StatelessWidget {
                             if (states.contains(WidgetState.selected)) {
                               return BorderSide(
                                   width: 1,
-                                  color: Theme.of(context).colorScheme.secondary);
+                                  color:
+                                      Theme.of(context).colorScheme.secondary);
                             }
                             return const BorderSide(
                                 width: 1, color: Colors.black);

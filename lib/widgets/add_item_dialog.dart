@@ -67,7 +67,8 @@ class _AddItemDialogState extends State<AddItemDialog> {
                   context: context,
                   isScrollControlled: true,
                   shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(25)),
                   ),
                   builder: (context) => EmojiPickerSheet(
                     onEmojiSelected: (emoji) {
@@ -160,8 +161,7 @@ class _AddItemDialogState extends State<AddItemDialog> {
                           fontFamily: "Manrope",
                           fontWeight: FontWeight.w900,
                           fontSize: 15)),
-                      minimumSize:
-                          const WidgetStatePropertyAll(Size(110, 50))),
+                      minimumSize: const WidgetStatePropertyAll(Size(110, 50))),
                   onPressed: () {
                     itemController.text = '';
                     qtyController.text = '';
@@ -183,11 +183,11 @@ class _AddItemDialogState extends State<AddItemDialog> {
                           fontFamily: "Manrope",
                           fontWeight: FontWeight.w900,
                           fontSize: 15)),
-                      minimumSize:
-                          const WidgetStatePropertyAll(Size(110, 50))),
+                      minimumSize: const WidgetStatePropertyAll(Size(110, 50))),
                   onPressed: () {
                     if (itemController.text.isNotEmpty) {
-                      widget.onAdd(itemController.text, qtyController.text, selectedEmoji);
+                      widget.onAdd(itemController.text, qtyController.text,
+                          selectedEmoji);
                       itemController.text = '';
                       qtyController.text = '';
                       Navigator.of(context).pop();

@@ -70,14 +70,12 @@ class _EditUsernameDialogState extends State<EditUsernameDialog> {
                         borderRadius: BorderRadius.circular(10))),
                     backgroundColor: WidgetStatePropertyAll(
                         Theme.of(context).colorScheme.secondary),
-                    foregroundColor:
-                        const WidgetStatePropertyAll(Colors.white),
+                    foregroundColor: const WidgetStatePropertyAll(Colors.white),
                     textStyle: const WidgetStatePropertyAll(TextStyle(
                         fontFamily: "Manrope",
                         fontWeight: FontWeight.w900,
                         fontSize: 15)),
-                    minimumSize:
-                        const WidgetStatePropertyAll(Size(110, 50))),
+                    minimumSize: const WidgetStatePropertyAll(Size(110, 50))),
                 onPressed: () {
                   usernameController.text = '';
                   Navigator.of(context).pop();
@@ -90,14 +88,12 @@ class _EditUsernameDialogState extends State<EditUsernameDialog> {
                         borderRadius: BorderRadius.circular(10))),
                     backgroundColor: WidgetStatePropertyAll(
                         Theme.of(context).colorScheme.primary),
-                    foregroundColor:
-                        const WidgetStatePropertyAll(Colors.white),
+                    foregroundColor: const WidgetStatePropertyAll(Colors.white),
                     textStyle: const WidgetStatePropertyAll(TextStyle(
                         fontFamily: "Manrope",
                         fontWeight: FontWeight.w900,
                         fontSize: 15)),
-                    minimumSize:
-                        const WidgetStatePropertyAll(Size(110, 50))),
+                    minimumSize: const WidgetStatePropertyAll(Size(110, 50))),
                 onPressed: () {
                   if (usernameController.text.isNotEmpty) {
                     widget.onSave(usernameController.text);

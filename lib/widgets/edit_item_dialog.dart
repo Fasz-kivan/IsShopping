@@ -79,7 +79,8 @@ class _EditItemDialogState extends State<EditItemDialog> {
                   context: context,
                   isScrollControlled: true,
                   shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(25)),
                   ),
                   builder: (context) => EmojiPickerSheet(
                     onEmojiSelected: (emoji) {
@@ -170,8 +171,7 @@ class _EditItemDialogState extends State<EditItemDialog> {
                           fontFamily: "Manrope",
                           fontWeight: FontWeight.w900,
                           fontSize: 15)),
-                      minimumSize:
-                          const WidgetStatePropertyAll(Size(110, 50))),
+                      minimumSize: const WidgetStatePropertyAll(Size(110, 50))),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
@@ -189,11 +189,11 @@ class _EditItemDialogState extends State<EditItemDialog> {
                           fontFamily: "Manrope",
                           fontWeight: FontWeight.w900,
                           fontSize: 15)),
-                      minimumSize:
-                          const WidgetStatePropertyAll(Size(110, 50))),
+                      minimumSize: const WidgetStatePropertyAll(Size(110, 50))),
                   onPressed: () {
                     if (itemController.text.isNotEmpty) {
-                      widget.onSave(itemController.text, qtyController.text, selectedEmoji);
+                      widget.onSave(itemController.text, qtyController.text,
+                          selectedEmoji);
                       Navigator.of(context).pop();
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
