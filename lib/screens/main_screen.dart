@@ -130,7 +130,7 @@ class MainScreen extends State<MainScreenDisplayer> {
                           i,
                           (context, animation) => shoppingItemTemplate(
                               context, removedItem, animation),
-                          duration: const Duration(milliseconds: 200),
+                          duration: const Duration(milliseconds: 100),
                         );
                       }
                     }
@@ -206,61 +206,65 @@ class MainScreen extends State<MainScreenDisplayer> {
                         ),
                       ),
                     ),
-                    child: SingleChildScrollView(
-                      physics: const BouncingScrollPhysics(),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 10),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 15, top: 20),
-                            child: Container(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                'Shopping List',
-                                style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
-                                  fontSize: 23,
-                                  fontFamily: 'Manrope',
-                                  fontWeight: FontWeight.w900,
-                                ),
-                                textAlign: TextAlign.left,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 5, left: 15),
-                            child: Container(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                shoppingList.isEmpty
-                                    ? 'Time to add some items! 🛒'
-                                    : 'Tap and hold and item in the list to edit or delete it',
-                                style: const TextStyle(
-                                  color: Color(0xFFBFBFBF),
-                                  fontSize: 12,
-                                  fontFamily: 'Manrope',
-                                  fontWeight: FontWeight.w500,
+                    child: MediaQuery.removePadding(
+                      context: context,
+                      removeTop: true,
+                      child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 10),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 15, top: 20),
+                              child: Container(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  'Shopping List',
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                    fontSize: 23,
+                                    fontFamily: 'Manrope',
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                  textAlign: TextAlign.left,
                                 ),
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 10),
-                          if (!_isLoaded)
-                            const Center(child: CircularProgressIndicator())
-                          else
-                            AnimatedList(
-                              key: _listKey,
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              initialItemCount: shoppingList.length,
-                              itemBuilder: (context, index, animation) {
-                                return shoppingItemTemplate(
-                                    context, shoppingList[index], animation);
-                              },
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5, left: 15),
+                              child: Container(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  shoppingList.isEmpty
+                                      ? 'Time to add some items! 🛒'
+                                      : 'Tap and hold and item in the list to edit or delete it',
+                                  style: const TextStyle(
+                                    color: Color(0xFFBFBFBF),
+                                    fontSize: 12,
+                                    fontFamily: 'Manrope',
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
                             ),
-                        ],
+                            const SizedBox(height: 10),
+                            if (!_isLoaded)
+                              const Center(child: CircularProgressIndicator())
+                            else
+                              AnimatedList(
+                                key: _listKey,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                initialItemCount: shoppingList.length,
+                                itemBuilder: (context, index, animation) {
+                                  return shoppingItemTemplate(
+                                      context, shoppingList[index], animation);
+                                },
+                              ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -298,7 +302,7 @@ class MainScreen extends State<MainScreenDisplayer> {
     });
     _listKey.currentState?.insertItem(
       shoppingList.length - 1,
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 100),
     );
     storeShoppingItems(shoppingList);
   }
@@ -384,7 +388,7 @@ class MainScreen extends State<MainScreenDisplayer> {
           index,
           (context, animation) =>
               shoppingItemTemplate(context, shoppingItem, animation),
-          duration: const Duration(milliseconds: 200),
+          duration: const Duration(milliseconds: 100),
         );
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(

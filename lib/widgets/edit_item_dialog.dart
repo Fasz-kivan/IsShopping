@@ -58,71 +58,74 @@ class _EditItemDialogState extends State<EditItemDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      insetPadding: const EdgeInsets.symmetric(horizontal: 20),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30),
-      ),
-      title: Padding(
-        padding: const EdgeInsets.only(left: 5, top: 5),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text("✏️ Edit item",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                )),
-            GestureDetector(
-              onTap: () {
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(25)),
+    final screenWidth = MediaQuery.of(context).size.width;
+    final dialogWidth = screenWidth < 350 ? screenWidth - 40 : 310.0;
+
+    return SizedBox(
+      width: dialogWidth,
+      child: AlertDialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 20),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+        title: Padding(
+          padding: const EdgeInsets.only(left: 5, top: 5),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text("✏️ Edit item",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                  )),
+              GestureDetector(
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(25)),
+                    ),
+                    builder: (context) => EmojiPickerSheet(
+                      onEmojiSelected: (emoji) {
+                        setState(() {
+                          selectedEmoji = emoji;
+                          isManuallySelected = true;
+                        });
+                      },
+                    ),
+                  );
+                },
+                child: Container(
+                  height: 50,
+                  width: 50,
+                  decoration: ShapeDecoration(
+                    color: Theme.of(context).colorScheme.onBackground,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
-                  builder: (context) => EmojiPickerSheet(
-                    onEmojiSelected: (emoji) {
-                      setState(() {
-                        selectedEmoji = emoji;
-                        isManuallySelected = true;
-                      });
-                    },
-                  ),
-                );
-              },
-              child: Container(
-                height: 50,
-                width: 50,
-                decoration: ShapeDecoration(
-                  color: Theme.of(context).colorScheme.onBackground,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Transform.translate(
-                  offset: const Offset(0, 2),
-                  child: Center(
-                    child: Text(
-                      selectedEmoji,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 32,
-                        fontFamily: 'Segoe UI',
-                        fontWeight: FontWeight.w400,
+                  child: Transform.translate(
+                    offset: const Offset(0, 2),
+                    child: Center(
+                      child: Text(
+                        selectedEmoji,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 32,
+                          fontFamily: 'Segoe UI',
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-      content: SizedBox(
-        width: 340,
-        child: Column(
+        content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
@@ -140,7 +143,9 @@ class _EditItemDialogState extends State<EditItemDialog> {
                 style: const TextStyle(fontFamily: "Manrope"),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(
+              height: 20,
+            ),
             Padding(
               padding: const EdgeInsets.only(left: 5, right: 5),
               child: TextFormField(
@@ -157,7 +162,7 @@ class _EditItemDialogState extends State<EditItemDialog> {
             ),
             const SizedBox(height: 20),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
                   style: ButtonStyle(
@@ -173,10 +178,14 @@ class _EditItemDialogState extends State<EditItemDialog> {
                           fontSize: 15)),
                       minimumSize: const WidgetStatePropertyAll(Size(110, 50))),
                   onPressed: () {
+                    itemController.text = '';
+                    qtyController.text = '';
                     Navigator.of(context).pop();
                   },
                   child: const Text("Cancel"),
                 ),
+                SizedBox(
+                    width: MediaQuery.of(context).size.width < 350 ? 5 : 20),
                 ElevatedButton(
                   style: ButtonStyle(
                       shape: WidgetStatePropertyAll(RoundedRectangleBorder(
@@ -194,8 +203,11 @@ class _EditItemDialogState extends State<EditItemDialog> {
                     if (itemController.text.isNotEmpty) {
                       widget.onSave(itemController.text, qtyController.text,
                           selectedEmoji);
+                      itemController.text = '';
+                      qtyController.text = '';
                       Navigator.of(context).pop();
                     } else {
+                      Navigator.of(context).pop();
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text(
