@@ -44,8 +44,8 @@ class MainScreen extends State<MainScreenDisplayer> {
     }
   }
 
-  Widget shoppingItemTemplate(
-      BuildContext context, ShoppingItem shoppingItem, Animation<double> animation) {
+  Widget shoppingItemTemplate(BuildContext context, ShoppingItem shoppingItem,
+      Animation<double> animation) {
     return ShoppingItemTile(
       shoppingItem: shoppingItem,
       animation: animation,
@@ -128,7 +128,8 @@ class MainScreen extends State<MainScreenDisplayer> {
                         shoppingList.removeAt(i);
                         _listKey.currentState?.removeItem(
                           i,
-                          (context, animation) => shoppingItemTemplate(context, removedItem, animation),
+                          (context, animation) => shoppingItemTemplate(
+                              context, removedItem, animation),
                           duration: const Duration(milliseconds: 200),
                         );
                       }
@@ -359,12 +360,11 @@ class MainScreen extends State<MainScreenDisplayer> {
           initialEmoji: shoppingItem.emoji,
           onSave: (newName, newQuantity, newEmoji) {
             setState(() {
-              ShoppingItem updatedItem = checkItemForEmoji(
-                  ShoppingItem(
-                      itemName: newName,
-                      emoji: newEmoji,
-                      addedAt: shoppingItem.addedAt,
-                      quantity: shoppingItem.quantity));
+              ShoppingItem updatedItem = checkItemForEmoji(ShoppingItem(
+                  itemName: newName,
+                  emoji: newEmoji,
+                  addedAt: shoppingItem.addedAt,
+                  quantity: shoppingItem.quantity));
 
               shoppingItem.itemName = updatedItem.itemName;
               shoppingItem.quantity = newName.isEmpty ? null : newQuantity;
@@ -382,7 +382,8 @@ class MainScreen extends State<MainScreenDisplayer> {
         });
         _listKey.currentState?.removeItem(
           index,
-          (context, animation) => shoppingItemTemplate(context, shoppingItem, animation),
+          (context, animation) =>
+              shoppingItemTemplate(context, shoppingItem, animation),
           duration: const Duration(milliseconds: 200),
         );
         ScaffoldMessenger.of(context).showSnackBar(
