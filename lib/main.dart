@@ -31,6 +31,8 @@ class MainScreenDisplayer extends StatefulWidget {
 class MainScreen extends State<MainScreenDisplayer> {
   List<ShoppingItem> shoppingList = [];
   String username = "";
+  bool _isLoaded = false;
+  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
 
   Offset _longPressPosition = Offset.zero;
 
@@ -69,10 +71,18 @@ class MainScreen extends State<MainScreenDisplayer> {
     }
   }
 
-  Widget shoppingItemTemplate(BuildContext context, ShoppingItem shoppingItem) {
+  Widget shoppingItemTemplate(
+      BuildContext context, ShoppingItem shoppingItem, Animation<double> animation) {
     String formattedDate = DateFormat.MMMEd().format(shoppingItem.addedAt);
 
-    return Listener(
+    return SizeTransition(
+      sizeFactor: CurvedAnimation(
+        parent: animation,
+        curve: Curves.easeInOut,
+      ),
+      child: FadeTransition(
+        opacity: animation,
+        child: Listener(
         onPointerDown: (_) {},
         child: GestureDetector(
           onTap: () {
@@ -195,9 +205,9 @@ class MainScreen extends State<MainScreenDisplayer> {
                               width: 0.50, color: Color(0xFF1E1E1E)),
                           borderRadius: BorderRadius.circular(90),
                         ),
-                        side: MaterialStateBorderSide.resolveWith(
-                          (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.selected)) {
+                        side: WidgetStateBorderSide.resolveWith(
+                          (Set<WidgetState> states) {
+                            if (states.contains(WidgetState.selected)) {
                               return BorderSide(
                                   width: 1,
                                   color:
@@ -214,8 +224,11 @@ class MainScreen extends State<MainScreenDisplayer> {
               ),
             ),
           ),
-        ));
-  }
+        ),
+      ),
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -274,11 +287,22 @@ class MainScreen extends State<MainScreenDisplayer> {
               padding: const EdgeInsets.only(right: 15),
               child: IconButton(
                 icon: const Icon(Icons.delete_forever),
-                onPressed: () => setState(() {
-                  shoppingList
-                      .removeWhere((element) => element.isChecked == true);
-                  storeShoppingItems(shoppingList);
-                }),
+                onPressed: () {
+                  setState(() {
+                    for (int i = shoppingList.length - 1; i >= 0; i--) {
+                      if (shoppingList[i].isChecked) {
+                        final removedItem = shoppingList[i];
+                        shoppingList.removeAt(i);
+                        _listKey.currentState?.removeItem(
+                          i,
+                          (context, animation) => shoppingItemTemplate(context, removedItem, animation),
+                          duration: const Duration(milliseconds: 200),
+                        );
+                      }
+                    }
+                    storeShoppingItems(shoppingList);
+                  });
+                },
                 iconSize: 24,
               ),
             ),
@@ -389,8 +413,19 @@ class MainScreen extends State<MainScreenDisplayer> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          ...shoppingList.map((shoppingItem) =>
-                              shoppingItemTemplate(context, shoppingItem)),
+                          if (!_isLoaded)
+                            const Center(child: CircularProgressIndicator())
+                          else
+                            AnimatedList(
+                              key: _listKey,
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              initialItemCount: shoppingList.length,
+                              itemBuilder: (context, index, animation) {
+                                return shoppingItemTemplate(
+                                    context, shoppingList[index], animation);
+                              },
+                            ),
                         ],
                       ),
                     ),
@@ -406,9 +441,34 @@ class MainScreen extends State<MainScreenDisplayer> {
 
   TextEditingController itemcontroller = TextEditingController();
   TextEditingController qtycontroller = TextEditingController();
-  Future showAddDialog() => showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
+  Future<T?> _showAnimatedDialog<T>(BuildContext context, Widget dialog) {
+    return showGeneralDialog<T>(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      barrierColor: const Color(0x80000000),
+      transitionDuration: const Duration(milliseconds: 200),
+      pageBuilder: (context, animation, secondaryAnimation) => dialog,
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        final curve = CurvedAnimation(
+          parent: animation,
+          curve: Curves.easeOutBack,
+          reverseCurve: Curves.easeIn,
+        );
+        return ScaleTransition(
+          scale: curve,
+          child: FadeTransition(
+            opacity: animation,
+            child: child,
+          ),
+        );
+      },
+    );
+  }
+
+  Future showAddDialog() => _showAnimatedDialog(
+        context,
+        AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),
@@ -461,18 +521,18 @@ class MainScreen extends State<MainScreenDisplayer> {
                 children: [
                   ElevatedButton(
                     style: ButtonStyle(
-                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                        shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
-                        backgroundColor: MaterialStatePropertyAll(
+                        backgroundColor: WidgetStatePropertyAll(
                             Theme.of(context).colorScheme.secondary),
                         foregroundColor:
-                            const MaterialStatePropertyAll(Colors.white),
-                        textStyle: const MaterialStatePropertyAll(TextStyle(
+                            const WidgetStatePropertyAll(Colors.white),
+                        textStyle: const WidgetStatePropertyAll(TextStyle(
                             fontFamily: "Manrope",
                             fontWeight: FontWeight.w900,
                             fontSize: 15)),
                         minimumSize:
-                            const MaterialStatePropertyAll(Size(110, 50))),
+                            const WidgetStatePropertyAll(Size(110, 50))),
                     onPressed: () {
                       itemcontroller.text = '';
                       qtycontroller.text = '';
@@ -484,18 +544,18 @@ class MainScreen extends State<MainScreenDisplayer> {
                       width: MediaQuery.of(context).size.width < 350 ? 5 : 20),
                   ElevatedButton(
                     style: ButtonStyle(
-                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                        shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
-                        backgroundColor: MaterialStatePropertyAll(
+                        backgroundColor: WidgetStatePropertyAll(
                             Theme.of(context).colorScheme.primary),
                         foregroundColor:
-                            const MaterialStatePropertyAll(Colors.white),
-                        textStyle: const MaterialStatePropertyAll(TextStyle(
+                            const WidgetStatePropertyAll(Colors.white),
+                        textStyle: const WidgetStatePropertyAll(TextStyle(
                             fontFamily: "Manrope",
                             fontWeight: FontWeight.w900,
                             fontSize: 15)),
                         minimumSize:
-                            const MaterialStatePropertyAll(Size(110, 50))),
+                            const WidgetStatePropertyAll(Size(110, 50))),
                     onPressed: () {
                       setState(() {
                         if (itemcontroller.text.isNotEmpty) {
@@ -535,6 +595,10 @@ class MainScreen extends State<MainScreenDisplayer> {
   void addItemToList(ShoppingItem item) {
     item = checkItemForEmoji(item);
     shoppingList.add(item);
+    _listKey.currentState?.insertItem(
+      shoppingList.length - 1,
+      duration: const Duration(milliseconds: 200),
+    );
     storeShoppingItems(shoppingList);
   }
 
@@ -589,6 +653,7 @@ class MainScreen extends State<MainScreenDisplayer> {
     List<ShoppingItem> retrievedItems = await retrieveShoppingItems();
     setState(() {
       shoppingList = retrievedItems;
+      _isLoaded = true;
     });
   }
 
@@ -628,28 +693,35 @@ class MainScreen extends State<MainScreenDisplayer> {
           shoppingItem.quantity == null ? '' : shoppingItem.quantity.toString();
       updateItemDialog(shoppingItem);
     } else if (selectedOption == 'delete') {
-      setState(() {
-        shoppingList.remove(shoppingItem);
-      });
-
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            "Item Deleted 💥",
+      final index = shoppingList.indexOf(shoppingItem);
+      if (index != -1) {
+        setState(() {
+          shoppingList.removeAt(index);
+        });
+        _listKey.currentState?.removeItem(
+          index,
+          (context, animation) => shoppingItemTemplate(context, shoppingItem, animation),
+          duration: const Duration(milliseconds: 200),
+        );
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              "Item Deleted 💥",
+            ),
           ),
-        ),
-      );
-      storeShoppingItems(shoppingList);
+        );
+        storeShoppingItems(shoppingList);
+      }
     }
   }
 
   TextEditingController updateitemcontroller = TextEditingController();
   TextEditingController updateqtycontroller = TextEditingController();
 
-  Future updateItemDialog(ShoppingItem shoppingItem) => showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
+  Future updateItemDialog(ShoppingItem shoppingItem) => _showAnimatedDialog(
+        context,
+        AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),
@@ -700,18 +772,18 @@ class MainScreen extends State<MainScreenDisplayer> {
                 children: [
                   ElevatedButton(
                     style: ButtonStyle(
-                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                        shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
-                        backgroundColor: MaterialStatePropertyAll(
+                        backgroundColor: WidgetStatePropertyAll(
                             Theme.of(context).colorScheme.secondary),
                         foregroundColor:
-                            const MaterialStatePropertyAll(Colors.white),
-                        textStyle: const MaterialStatePropertyAll(TextStyle(
+                            const WidgetStatePropertyAll(Colors.white),
+                        textStyle: const WidgetStatePropertyAll(TextStyle(
                             fontFamily: "Manrope",
                             fontWeight: FontWeight.w900,
                             fontSize: 15)),
                         minimumSize:
-                            const MaterialStatePropertyAll(Size(110, 50))),
+                            const WidgetStatePropertyAll(Size(110, 50))),
                     onPressed: () {
                       itemcontroller.text = '';
                       qtycontroller.text = '';
@@ -721,18 +793,18 @@ class MainScreen extends State<MainScreenDisplayer> {
                   ),
                   ElevatedButton(
                     style: ButtonStyle(
-                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                        shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
-                        backgroundColor: MaterialStatePropertyAll(
+                        backgroundColor: WidgetStatePropertyAll(
                             Theme.of(context).colorScheme.primary),
                         foregroundColor:
-                            const MaterialStatePropertyAll(Colors.white),
-                        textStyle: const MaterialStatePropertyAll(TextStyle(
+                            const WidgetStatePropertyAll(Colors.white),
+                        textStyle: const WidgetStatePropertyAll(TextStyle(
                             fontFamily: "Manrope",
                             fontWeight: FontWeight.w900,
                             fontSize: 15)),
                         minimumSize:
-                            const MaterialStatePropertyAll(Size(110, 50))),
+                            const WidgetStatePropertyAll(Size(110, 50))),
                     onPressed: () {
                       setState(() {
                         if (updateitemcontroller.text.isNotEmpty) {
@@ -775,9 +847,9 @@ class MainScreen extends State<MainScreenDisplayer> {
       );
 
   TextEditingController usernamecontroller = TextEditingController();
-  Future setUsernameDialog() => showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
+  Future setUsernameDialog() => _showAnimatedDialog(
+        context,
+        AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),
@@ -812,18 +884,18 @@ class MainScreen extends State<MainScreenDisplayer> {
                 children: [
                   ElevatedButton(
                     style: ButtonStyle(
-                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                        shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
-                        backgroundColor: MaterialStatePropertyAll(
+                        backgroundColor: WidgetStatePropertyAll(
                             Theme.of(context).colorScheme.secondary),
                         foregroundColor:
-                            const MaterialStatePropertyAll(Colors.white),
-                        textStyle: const MaterialStatePropertyAll(TextStyle(
+                            const WidgetStatePropertyAll(Colors.white),
+                        textStyle: const WidgetStatePropertyAll(TextStyle(
                             fontFamily: "Manrope",
                             fontWeight: FontWeight.w900,
                             fontSize: 15)),
                         minimumSize:
-                            const MaterialStatePropertyAll(Size(110, 50))),
+                            const WidgetStatePropertyAll(Size(110, 50))),
                     onPressed: () {
                       usernamecontroller.text = '';
                       Navigator.of(context).pop();
@@ -832,18 +904,18 @@ class MainScreen extends State<MainScreenDisplayer> {
                   ),
                   ElevatedButton(
                     style: ButtonStyle(
-                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                        shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
-                        backgroundColor: MaterialStatePropertyAll(
+                        backgroundColor: WidgetStatePropertyAll(
                             Theme.of(context).colorScheme.primary),
                         foregroundColor:
-                            const MaterialStatePropertyAll(Colors.white),
-                        textStyle: const MaterialStatePropertyAll(TextStyle(
+                            const WidgetStatePropertyAll(Colors.white),
+                        textStyle: const WidgetStatePropertyAll(TextStyle(
                             fontFamily: "Manrope",
                             fontWeight: FontWeight.w900,
                             fontSize: 15)),
                         minimumSize:
-                            const MaterialStatePropertyAll(Size(110, 50))),
+                            const WidgetStatePropertyAll(Size(110, 50))),
                     onPressed: () {
                       setState(() {
                         if (usernamecontroller.text.isNotEmpty) {
