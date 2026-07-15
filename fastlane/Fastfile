@@ -1,0 +1,32 @@
+default_platform(:android)
+
+platform :android do
+  desc "Build the release Android App Bundle (.aab)"
+  lane :build do
+    sh("flutter build appbundle --release")
+  end
+
+  desc "Submit a new Beta Build to Google Play Console Internal Testing track"
+  lane :beta do
+    # Build Flutter release bundle
+    build
+    
+    # Upload to Google Play Internal track
+    upload_to_play_store(
+      track: 'internal',
+      aab: '../build/app/outputs/bundle/release/app-release.aab'
+    )
+  end
+
+  desc "Submit a new Production Build to Google Play Console Production track"
+  lane :deploy do
+    # Build Flutter release bundle
+    build
+    
+    # Upload to Google Play Production track
+    upload_to_play_store(
+      track: 'production',
+      aab: '../build/app/outputs/bundle/release/app-release.aab'
+    )
+  end
+end

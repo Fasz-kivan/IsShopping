@@ -8,7 +8,7 @@
 PRODUCT_NAME = is_shopping
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.faszkivan.isShopping
+PRODUCT_BUNDLE_IDENTIFIER = com.lovaszakos.isShopping
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2024 com.faszkivan All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2026 Lovász Ákos. All rights reserved.

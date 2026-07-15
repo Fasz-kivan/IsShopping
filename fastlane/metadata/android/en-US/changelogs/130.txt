@@ -1,5 +1,0 @@
-Upgrade to flutter 3.19.6
-
-Fix web build and bump flutter version
-
-Dark theme

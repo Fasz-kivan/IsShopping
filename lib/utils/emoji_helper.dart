@@ -1,3 +1,5 @@
+// ignore_for_file: valid_regexps
+
 import 'package:dart_emoji/dart_emoji.dart';
 import 'package:is_shopping/database/emoji_database.dart';
 import 'package:is_shopping/shopping_item.dart';
