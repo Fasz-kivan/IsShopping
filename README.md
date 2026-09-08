@@ -3,6 +3,7 @@
 
 [![Dart and Flutter build](https://github.com/Fasz-kivan/IsShopping/actions/workflows/dart.yml/badge.svg)](https://github.com/Fasz-kivan/IsShopping/actions/workflows/dart.yml)
 [![Release Build](https://github.com/Fasz-kivan/IsShopping/actions/workflows/publish.yml/badge.svg)](https://github.com/Fasz-kivan/IsShopping/actions/workflows/publish.yml)
+[![F-Droid](https://img.shields.io/badge/F--Droid-available-blue.svg?style=for-the-badge&logo=f-droid&logoColor=white)](docs/FDROID_RELEASE_GUIDE.md)
 
 IsShopping by Lovász Ákos, a lightweight shopping list with a touch of flavor via emoji 🍕😊
 

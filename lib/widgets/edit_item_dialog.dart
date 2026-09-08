@@ -114,7 +114,6 @@ class _EditItemDialogState extends State<EditItemDialog> {
                         style: const TextStyle(
                           color: Colors.black,
                           fontSize: 32,
-                          fontFamily: 'Segoe UI',
                           fontWeight: FontWeight.w400,
                         ),
                       ),

@@ -1,0 +1,8 @@
+IsShopping is a clean, modern, and lightweight grocery and shopping list app that makes planning simple and fun with emoji flair.
+
+Key Features:
+- <b>Smart Emoji Assignment</b>: Assign contextual food and grocery emojis to items for quick scanning.
+- <b>Quick Quantity Controls</b>: Adjust item counts effortlessly on the go.
+- <b>Light & Dark Themes</b>: Full dark mode support for comfortable night-time shopping.
+- <b>Smooth Performance</b>: Fluid animations and high refresh rate display support.
+- <b>100% Offline & Private</b>: All your lists and preferences stay strictly on your device. No cloud sync, no tracking, no ads, and zero network permissions required.
