@@ -1,5 +1,5 @@
 Categories:
-  - Money
+  - Shopping List
 License: GPL-3.0-only
 AuthorName: Ákos Lovász
 AuthorEmail: lovasz.akos.dev@gmail.com
@@ -7,8 +7,12 @@ SourceCode: https://github.com/Fasz-kivan/IsShopping
 IssueTracker: https://github.com/Fasz-kivan/IsShopping/issues
 Changelog: https://github.com/Fasz-kivan/IsShopping/releases
 
+RepoType: git
+Repo: https://github.com/Fasz-kivan/IsShopping.git
+
 AutoUpdateMode: Version
 UpdateCheckMode: Tags
+UpdateCheckData: pubspec.yaml|version:\s.+\+(\d+)|.|version:\s(.+)\+
 CurrentVersion: 2.0.2
 CurrentVersionCode: 16
 
