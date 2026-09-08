@@ -18,7 +18,7 @@ Repo: https://github.com/Fasz-kivan/IsShopping.git
 Builds:
   - versionName: 2.0.2
     versionCode: 16
-    commit: v2.0.2
+    commit: 71012b810bb7eccc16c668bbdc83b9339768eac9
     output: build/app/outputs/flutter-apk/app-release.apk
     srclibs:
       - flutter@stable
