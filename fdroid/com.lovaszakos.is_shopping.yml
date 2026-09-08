@@ -1,0 +1,32 @@
+Categories:
+  - Money
+License: GPL-3.0-only
+AuthorName: Ákos Lovász
+AuthorEmail: lovasz.akos.dev@gmail.com
+SourceCode: https://github.com/Fasz-kivan/IsShopping
+IssueTracker: https://github.com/Fasz-kivan/IsShopping/issues
+Changelog: https://github.com/Fasz-kivan/IsShopping/releases
+
+AutoUpdateMode: Version
+UpdateCheckMode: Tags
+CurrentVersion: 2.0.2
+CurrentVersionCode: 16
+
+Builds:
+  - versionName: 2.0.2
+    versionCode: 16
+    commit: v2.0.2
+    srclibs:
+      - flutter@stable
+    prebuild:
+      - echo "flutter.sdk=$$flutter$$" >> android/local.properties
+    build:
+      - $$flutter$$/bin/flutter config --no-analytics
+      - $$flutter$$/bin/flutter pub get
+      - $$flutter$$/bin/flutter build apk --release
+    output: build/app/outputs/flutter-apk/app-release.apk
+
+AutoName: IsShopping
+Description: |-
+  A lightweight, privacy-focused shopping list with emoji flair.
+  Everything is stored strictly offline on-device with zero tracking or network permissions.

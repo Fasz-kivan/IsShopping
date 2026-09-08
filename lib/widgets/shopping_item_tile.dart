@@ -67,7 +67,6 @@ class ShoppingItemTile extends StatelessWidget {
                             style: const TextStyle(
                               color: Colors.black,
                               fontSize: 40,
-                              fontFamily: 'Segoe UI',
                               fontWeight: FontWeight.w400,
                             ),
                           ),

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class Themes {
   static ThemeData lightTheme = ThemeData(
       useMaterial3: false,
-      fontFamily: 'Segoe UI',
+      fontFamily: 'Manrope',
       colorScheme: const ColorScheme(
         brightness: Brightness.light,
         primary: Color(0xff5fd068), // used for accent colors
@@ -21,7 +21,7 @@ class Themes {
 
   static ThemeData darkTheme = ThemeData(
       useMaterial3: false,
-      fontFamily: 'Segoe UI',
+      fontFamily: 'Manrope',
       colorScheme: const ColorScheme(
         brightness: Brightness.dark,
         primary: Color(0xff48854c), // used for accent colors

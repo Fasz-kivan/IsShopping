@@ -1,0 +1,4 @@
+- Standardized app typography to open-source Manrope
+- Removed unnecessary asset bloat to minimize app download size
+- Official F-Droid package release readiness
+- General stability and UI polish
