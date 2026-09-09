@@ -7,11 +7,6 @@ SourceCode: https://github.com/Fasz-kivan/IsShopping
 IssueTracker: https://github.com/Fasz-kivan/IsShopping/issues
 Changelog: https://github.com/Fasz-kivan/IsShopping/releases
 
-AutoName: IsShopping
-Description: |-
-  A lightweight, simple shopping list with emoji flair.
-  Everything is stored strictly offline on-device with zero tracking or network permissions.
-
 RepoType: git
 Repo: https://github.com/Fasz-kivan/IsShopping.git
 

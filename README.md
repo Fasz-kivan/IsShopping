@@ -1,5 +1,5 @@
 # IsShopping
-![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
+![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)[![F-Droid](https://img.shields.io/badge/F--Droid-available-blue.svg?style=for-the-badge&logo=f-droid&logoColor=white)](docs/FDROID_RELEASE_GUIDE.md)
 
 [![Dart and Flutter build](https://github.com/Fasz-kivan/IsShopping/actions/workflows/dart.yml/badge.svg)](https://github.com/Fasz-kivan/IsShopping/actions/workflows/dart.yml)
 [![Release Build](https://github.com/Fasz-kivan/IsShopping/actions/workflows/publish.yml/badge.svg)](https://github.com/Fasz-kivan/IsShopping/actions/workflows/publish.yml)
